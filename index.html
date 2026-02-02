@@ -1,0 +1,1183 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="theme-color" content="#FF7A00" />
+  <title>GRÁFICA SAGA </title>
+  <meta name="description" content="GRÁFICA SAGA — Gráfica em Uberlândia (MG)." />
+
+  <style>
+    :root{
+      --brand:#FF7A00;         /* cor exata */
+      --brand-2:#FF9A2E;
+      --brand-dark:#E06600;
+
+      /* azul (detalhes do mostruário) */
+      --blue:#0E3B78;
+      --blue-2:#1A5CB8;
+
+      --bg:#ffffff;
+      --paper:#FFF6EE;
+      --ink:#121212;
+      --muted:#5A5A5A;
+      --line:#ECECEC;
+
+      --shadow: 0 18px 50px rgba(0,0,0,.10);
+      --shadow-soft: 0 10px 30px rgba(0,0,0,.08);
+      --radius: 18px;
+      --radius-2: 26px;
+
+      --max: 1040px;
+
+      --ease: cubic-bezier(.2,.8,.2,1);
+      --dur: 700ms;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      color:var(--ink);
+      background:
+        radial-gradient(900px 500px at -10% 20%, rgba(255,122,0,.07), transparent 55%),
+        radial-gradient(900px 500px at 110% 20%, rgba(255,154,46,.06), transparent 55%),
+        radial-gradient(420px 260px at 20% 70%, rgba(255,246,238,.04), transparent 60%),
+        radial-gradient(520px 320px at 80% 80%, rgba(255,246,238,.035), transparent 65%),
+        linear-gradient(
+  180deg,
+  #f7d38f 0%,
+  #ffead0 55%,
+  #ffffff 100%
+);
+      line-height:1.5;
+    }
+
+    a{color:inherit}
+    .wrap{max-width:var(--max); width:min(100%, var(--max)); margin:0 auto; padding:0 20px}
+    @media (min-width: 1200px){ .wrap{padding:0 32px;} }
+
+    /* ====== ANIMAÇÕES (base) ====== */
+    .reveal{
+      opacity:0;
+      transform: translateY(14px) scale(.99);
+      filter: blur(6px);
+      transition:
+        opacity var(--dur) var(--ease),
+        transform var(--dur) var(--ease),
+        filter var(--dur) var(--ease);
+      will-change: transform, opacity, filter;
+    }
+    .reveal.is-visible{
+      opacity:1;
+      transform: translateY(0) scale(1);
+      filter: blur(0);
+    }
+    .reveal.delay-1{transition-delay: 80ms;}
+    .reveal.delay-2{transition-delay: 160ms;}
+    .reveal.delay-3{transition-delay: 240ms;}
+    .reveal.delay-4{transition-delay: 320ms;}
+
+    @media (prefers-reduced-motion: reduce){
+      *{scroll-behavior:auto !important;}
+      .reveal{opacity:1 !important; transform:none !important; filter:none !important; transition:none !important;}
+      .btn, .card, .topbar{transition:none !important;}
+    }
+
+    /* ====== TOP BAR ====== */
+    .topbar{
+      position:sticky; top:0; z-index:50;
+      background: transparent;
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(0,0,0,.05);
+      box-shadow: none;
+      transition: padding 240ms var(--ease), background 240ms var(--ease), box-shadow 240ms var(--ease);
+    }
+    .topbar.is-scrolled{
+      background: transparent;
+      box-shadow: none;
+    }
+    .topbar-inner{
+      display:flex; align-items:center; justify-content:flex-start;
+      padding:14px 0;
+      gap:12px;
+    }
+
+    .brand{display:flex; align-items:center; gap:12px; text-decoration:none;}
+    .brand-text{display:flex; flex-direction:column; line-height:1.1;}
+    .logo{
+  width:56px;
+  height:56px;
+  border-radius:18px;
+  background:#fff;
+  border:1px solid rgba(0,0,0,.06);
+  box-shadow: 0 16px 35px rgba(0,0,0,.08);
+  display:grid;
+  place-items:center;
+  overflow:hidden;
+  transition: transform 260ms var(--ease);
+}
+
+.brand:hover .logo{
+  transform: rotate(-2deg) scale(1.02);
+}
+
+.logo img{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  padding:6px;
+  display:block;
+}
+    .brand:hover .logo{transform: rotate(-2deg) scale(1.02);}
+    .brand strong{font-size:18px; letter-spacing:.2px}
+    .brand span{display:block; font-size:13px; color:var(--muted); margin-top:2px}
+
+    nav{
+      display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end; margin-left:auto;
+      padding:6px;
+      border-radius:999px;
+      background: rgba(255,255,255,.7);
+      border:1px solid rgba(0,0,0,.06);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.7);
+    }
+    nav a{
+      text-decoration:none;
+      font-size:13px;
+      color:#2a2a2a;
+      padding:8px 10px;
+      border-radius:999px;
+      border: 1px solid transparent;
+      transition: background 220ms var(--ease), border-color 220ms var(--ease), transform 220ms var(--ease);
+    }
+    nav a:hover{
+      background: rgba(255,122,0,.12);
+      border-color: rgba(255,122,0,.24);
+      transform: translateY(-1px);
+      color:#111;
+    }
+    @media (max-width: 980px){ nav{display:none;} }
+    .topbar .btn{margin-left:8px;}
+
+    /* ====== BUTTONS ====== */
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center;
+      gap:10px;
+      border:1px solid transparent;
+      border-radius:999px;
+      padding:11px 14px;
+      text-decoration:none;
+      font-weight:800;
+      font-size:14px;
+      white-space:nowrap;
+      cursor:pointer;
+      user-select:none;
+      transition: transform 160ms var(--ease), box-shadow 220ms var(--ease), background 220ms var(--ease), border-color 220ms var(--ease), filter 220ms var(--ease);
+      position:relative;
+      overflow:hidden;
+    }
+    .btn:active{transform: translateY(1px) scale(.99)}
+    .btn-primary{
+      background:
+        radial-gradient(120px 60px at 20% 20%, rgba(255,255,255,.55), transparent 55%),
+        linear-gradient(135deg, var(--brand), var(--brand-2));
+      color:#fff;
+      box-shadow: 0 16px 34px rgba(255,122,0,.24);
+    }
+    .btn-primary:before{
+      content:"";
+      position:absolute; inset:-40%;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.45), transparent 45%);
+      transform: translateX(-20%) translateY(-10%);
+      opacity:0;
+      transition: opacity 220ms var(--ease);
+      pointer-events:none;
+    }
+    .btn-primary:hover{
+      box-shadow: 0 22px 48px rgba(255,122,0,.32);
+      filter: saturate(1.05);
+      transform: translateY(-1px);
+    }
+    .btn-primary:hover:before{opacity:1;}
+    .btn-ghost{
+      background: rgba(255,255,255,.88);
+      border-color: rgba(0,0,0,.08);
+      color:#151515;
+      box-shadow: 0 10px 24px rgba(0,0,0,.06);
+    }
+    .btn-ghost:hover{
+      border-color: rgba(255,122,0,.28);
+      transform: translateY(-1px);
+    }
+
+    /* ====== HERO ====== */
+    .hero{padding:64px 0 28px;}
+    .hero-grid{
+      display:grid;
+      grid-template-columns: 1.35fr .65fr;
+      gap:22px;
+      align-items:stretch;
+    }
+    @media (max-width: 980px){ .hero-grid{grid-template-columns:1fr;} }
+
+    .hero-card{
+      border-radius: var(--radius-2);
+      border: 1px solid rgba(0,0,0,.06);
+      background:
+        radial-gradient(700px 260px at 12% 10%, rgba(255,122,0,.18), transparent 60%),
+        radial-gradient(520px 280px at 80% 0%, rgba(255,154,46,.16), transparent 60%),
+        rgba(255,255,255,.86);
+      box-shadow: var(--shadow);
+      padding:28px;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .tag{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:7px 12px;
+      border-radius:999px;
+      background: rgba(255,122,0,.12);
+      color:#7a2f00;
+      font-weight:900;
+      font-size:12px;
+      border:1px solid rgba(255,122,0,.18);
+    }
+
+    h1{
+      margin:12px 0 10px;
+      font-size:40px;
+      line-height:1.05;
+      letter-spacing:-.8px;
+    }
+    @media (max-width: 560px){ h1{font-size:30px} }
+    .sub{margin:0; color:var(--muted); font-size:15px; max-width:70ch;}
+    .hero-actions{margin-top:18px; display:flex; gap:10px; flex-wrap:wrap;}
+
+    .stats{
+      margin-top:18px;
+      display:grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap:12px;
+    }
+    @media (max-width: 980px){ .stats{grid-template-columns: repeat(2, 1fr);} }
+    @media (max-width: 560px){ .stats{grid-template-columns:1fr;} }
+
+    .stat{
+      padding:12px 12px;
+      border-radius: 16px;
+      border:1px solid rgba(0,0,0,.06);
+      background: rgba(255,255,255,.75);
+      box-shadow: var(--shadow-soft);
+      transition: transform 220ms var(--ease), box-shadow 220ms var(--ease);
+    }
+    .stat:hover{transform: translateY(-2px); box-shadow: 0 18px 36px rgba(0,0,0,.10);}
+    .stat strong{display:block; font-size:16px}
+    .stat span{display:block; font-size:12px; color:var(--muted)}
+
+    /* ====== SIDE ====== */
+    .side{
+      border-radius: var(--radius-2);
+      border: 1px solid rgba(0,0,0,.06);
+      background: rgba(255,255,255,.88);
+      box-shadow: var(--shadow);
+      padding:18px;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+    }
+
+    .kv{
+      display:grid;
+      grid-template-columns: 20px 1fr;
+      gap:10px 12px;
+      align-items:start;
+      font-size:14px;
+      padding:12px;
+      border-radius: 18px;
+      border:1px dashed rgba(0,0,0,.12);
+      background: linear-gradient(180deg, rgba(255,246,238,.75), rgba(255,255,255,.65));
+    }
+
+    .icon{
+      width:20px; height:20px; display:grid; place-items:center;
+      border-radius: 8px;
+      background: rgba(255,122,0,.12);
+      border:1px solid rgba(255,122,0,.18);
+      color:#7a2f00;
+      font-weight:900;
+      font-size:12px;
+    }
+
+    .mini-links{display:flex; gap:10px; flex-wrap:wrap;}
+    .mini-links a{
+      text-decoration:none;
+      padding:8px 10px;
+      border-radius:999px;
+      border:1px solid rgba(0,0,0,.08);
+      background:#fff;
+      font-size:13px;
+      transition: transform 200ms var(--ease), border-color 200ms var(--ease);
+    }
+    .mini-links a:hover{border-color: rgba(255,122,0,.28); transform: translateY(-1px);}
+
+    /* ====== SECTIONS ====== */
+    section{padding:42px 0}
+    .section-title{
+      display:flex; align-items:baseline; justify-content:space-between;
+      gap:12px; flex-wrap:wrap;
+      margin-bottom:18px;
+    }
+    .section-title h2{margin:0; font-size:22px; letter-spacing:-.2px;}
+    .section-title p{margin:0; color:var(--muted); font-size:14px;}
+
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap:18px;
+    }
+
+    .card{
+      background:#fff;
+      border:1px solid rgba(0,0,0,.06);
+      border-radius: var(--radius-2);
+      box-shadow: var(--shadow-soft);
+      padding:18px;
+      position:relative;
+      overflow:hidden;
+      transition: transform 240ms var(--ease), box-shadow 240ms var(--ease), border-color 240ms var(--ease);
+    }
+    .card:hover{
+      transform: translateY(-3px);
+      box-shadow: 0 22px 48px rgba(0,0,0,.12);
+      border-color: rgba(255,122,0,.18);
+    }
+
+    /* PRODUCTS */
+    .products .item{grid-column: span 4; min-height:140px; display:flex; flex-direction:column; gap:10px;}
+    .products .item.spotlight{
+      transform: scale(1.02);
+      box-shadow: 0 26px 60px rgba(0,0,0,.16);
+      border-color: rgba(255,122,0,.32);
+      z-index:1;
+    }
+    .products .item.dim{
+      opacity:.65;
+      filter: blur(.2px);
+      transform: scale(.98);
+    }
+    .products .item:before{
+      content:"";
+      position:absolute; inset:auto -90px -90px auto;
+      width:200px; height:200px;
+      border-radius:50%;
+      background: radial-gradient(circle at 30% 30%, rgba(255,122,0,.20), rgba(255,122,0,0) 62%);
+      pointer-events:none;
+    }
+    .pill{
+      display:inline-flex;
+      align-self:flex-start;
+      padding:6px 10px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:900;
+      background: rgba(0,0,0,.04);
+      border:1px solid rgba(0,0,0,.06);
+      color:#333;
+    }
+    .products h3{margin:0; font-size:16px}
+    .products p{margin:0; color:var(--muted); font-size:13px}
+
+    @media (max-width: 980px){ .products .item{grid-column: span 6;} }
+    @media (max-width: 560px){ .products .item{grid-column: span 12;} }
+
+    /* ====== MOSTRUÁRIO (com detalhes em azul) ====== */
+    .showcase .shot{grid-column: span 4; padding:0; overflow:hidden;}
+    .showcase .shot:hover{border-color: rgba(14,59,120,.20);}
+    .showcase{
+      position:relative;
+      isolation:isolate;
+    }
+    .showcase:before{
+      content:"";
+      position:absolute;
+      inset:-20px;
+      border-radius: 28px;
+      background: linear-gradient(135deg, rgba(255,255,255,.55), rgba(255,255,255,0));
+      border: 1px solid rgba(255,122,0,.12);
+      opacity:.25;
+      transition: opacity 600ms var(--ease), transform 600ms var(--ease);
+      transform: translateY(10px);
+      pointer-events:none;
+      z-index:-1;
+    }
+    .showcase.is-visible:before{
+      opacity:.7;
+      transform: translateY(0);
+    }
+    .shot-top{
+      height:190px;
+      padding:10px;
+      display:grid;
+      place-items:center;
+      background:
+        radial-gradient(420px 220px at 10% 10%, rgba(14,59,120,.12), transparent 60%),
+        radial-gradient(420px 220px at 90% 0%, rgba(26,92,184,.10), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,.95), rgba(255,255,255,.80));
+      border-bottom: 1px solid rgba(0,0,0,.06);
+      position:relative;
+    }
+    .shot-top:after{
+      content:"";
+      position:absolute; inset:0;
+      background: linear-gradient(90deg, rgba(14,59,120,.10), transparent 45%);
+      opacity:.65;
+      pointer-events:none;
+    }
+    .shot-top img{
+      width:min(88%, 340px);
+      height:100%;
+      object-fit:contain;
+      max-height:170px;
+      transform: translateY(0);
+      filter: drop-shadow(0 18px 30px rgba(0,0,0,.18));
+      transition: transform 260ms var(--ease);
+    }
+    .shot:hover .shot-top img{transform: translateY(2px) scale(1.02);}
+
+    .shot-body{padding:14px 16px 16px; display:flex; flex-direction:column; gap:10px;}
+    .shot-pill{
+      display:inline-flex;
+      align-self:flex-start;
+      padding:6px 10px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:900;
+      color: #0a2a55;
+      background: rgba(14,59,120,.10);
+      border:1px solid rgba(14,59,120,.18);
+    }
+    .shot-body h3{margin:0; font-size:16px; letter-spacing:-.2px;}
+    .shot-body p{margin:0; color:var(--muted); font-size:13px;}
+    .shot-meta{
+      margin-top:auto;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      padding-top:10px;
+      border-top:1px dashed rgba(0,0,0,.12);
+    }
+    .meta-chip{
+      font-size:12px;
+      font-weight:800;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid rgba(0,0,0,.08);
+      background:#fff;
+      color:#2a2a2a;
+    }
+    .meta-chip.blue{
+      border-color: rgba(14,59,120,.20);
+      background: rgba(14,59,120,.06);
+      color: #0a2a55;
+    }
+
+    @media (max-width: 980px){ .showcase .shot{grid-column: span 6;} }
+    @media (max-width: 560px){ .showcase .shot{grid-column: span 12;} }
+
+    /* REVIEWS */
+    .reviews .quote{grid-column: span 4; min-height:150px; display:flex; flex-direction:column; gap:10px; border-left:6px solid rgba(255,122,0,.35);}
+    .reviews .quote p{margin:0; font-size:14px}
+    .reviews .quote footer{margin-top:auto; color:var(--muted); font-size:13px}
+    .reviews .quote.is-hidden{display:none;}
+    .reviews.is-expanded .quote.is-hidden{display:flex;}
+    .rating-summary{
+      display:grid;
+      grid-template-columns: minmax(140px, 200px) 1fr;
+      gap:16px;
+      padding:16px;
+      border-radius: var(--radius-2);
+      border:1px solid rgba(0,0,0,.06);
+      background:#fff;
+      box-shadow: var(--shadow-soft);
+      margin-bottom:16px;
+    }
+    .rating-score{
+      display:flex; flex-direction:column; align-items:flex-start; justify-content:center;
+      gap:6px;
+    }
+    .rating-score strong{font-size:34px; line-height:1;}
+    .rating-stars{color:var(--brand); font-size:16px; letter-spacing:2px;}
+    .rating-score span{font-size:12px; color:var(--muted);}
+    .rating-bars{display:grid; gap:8px;}
+    .rating-row{display:grid; grid-template-columns: 16px 1fr; gap:10px; align-items:center;}
+    .rating-row .label{font-size:12px; color:var(--muted);}
+    .bar{
+      height:8px;
+      border-radius:999px;
+      background: rgba(0,0,0,.08);
+      overflow:hidden;
+    }
+    .bar > i{
+      display:block;
+      height:100%;
+      width:0%;
+      background: linear-gradient(135deg, var(--brand), var(--brand-2));
+    }
+    .bar[data-fill="5"] > i{width:93%;}
+    .bar[data-fill="4"] > i{width:4%;}
+    .bar[data-fill="3"] > i{width:1%;}
+    .bar[data-fill="2"] > i{width:0%;}
+    .bar[data-fill="1"] > i{width:1%;}
+    @media (max-width: 560px){
+      .rating-summary{grid-template-columns:1fr;}
+      .rating-score{align-items:center;}
+    }
+    @media (max-width: 980px){ .reviews .quote{grid-column: span 6;} }
+    @media (max-width: 560px){ .reviews .quote{grid-column: span 12;} }
+
+    /* MAP + HOURS */
+    .two-col{display:grid; grid-template-columns:1fr 1fr; gap:18px; align-items:stretch;}
+    @media (max-width: 980px){ .two-col{grid-template-columns:1fr;} }
+
+    .hours ul{margin:0; padding:0; list-style:none; display:grid; gap:8px; font-size:14px}
+    .hours li{
+      display:flex; justify-content:space-between; gap:12px;
+      padding:10px 12px;
+      border-radius: 16px;
+      border:1px solid rgba(0,0,0,.06);
+      background: linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,246,238,.65));
+    }
+    .hours .closed{opacity:.72}
+    .hours .today{
+      border-color: rgba(255,122,0,.32);
+      background: linear-gradient(180deg, rgba(255,246,238,.95), rgba(255,255,255,.75));
+    }
+
+    .map iframe{width:100%; height:340px; border:0; border-radius: var(--radius-2);}
+
+    .badges{display:flex; gap:10px; flex-wrap:wrap; margin-top:12px;}
+    .badge{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:9px 10px;
+      border-radius:999px;
+      border:1px solid rgba(0,0,0,.08);
+      background:#fff;
+      font-size:13px;
+      text-decoration:none;
+      transition: transform 200ms var(--ease), border-color 200ms var(--ease);
+    }
+    .badge:hover{border-color: rgba(255,122,0,.28); transform: translateY(-1px);}
+
+    /* FOOTER CTA */
+    .footer{
+      margin-top:24px;
+      padding:34px 0 40px;
+      border-top: 1px solid rgba(0,0,0,.06);
+      background: rgba(255,255,255,.9);
+    }
+    .footer-cta{
+      border-radius: var(--radius-2);
+      border:1px solid rgba(255,122,0,.22);
+      background:#fff;
+      padding:18px;
+      display:flex; align-items:center; justify-content:space-between;
+      gap:12px; flex-wrap:wrap;
+      box-shadow: var(--shadow-soft);
+      margin-bottom:16px;
+    }
+    .footer-inner{
+      display:flex; justify-content:space-between; gap:14px; flex-wrap:wrap;
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    .muted{color:var(--muted)}
+    /* 1) trava overflow horizontal (evita layout “explodir”) */
+html, body { overflow-x: hidden; }
+
+/* 2) itens dentro de grid/flex NÃO podem estourar a coluna */
+.hero-grid > *, 
+.grid > *,
+.topbar-inner > *{
+  min-width: 0;
+}
+
+/* 3) mídia sempre respeita o container */
+img, svg, video, canvas {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+/* ===== CLIENTES & PARCEIROS ===== */
+.partners{
+  padding:64px 0 44px;
+  background:
+    var(--paper);
+  margin-top:40px;
+  border-top: 1px solid rgba(0,0,0,.06);
+  border-bottom: 1px solid rgba(0,0,0,.06);
+}
+
+.partners .section-title h2,
+.partners .section-title p{
+  color:var(--ink);
+}
+.partners .section-title p{
+  color:var(--muted);
+}
+
+.partners-grid{
+  margin-top:22px;
+  display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap:26px;
+  align-items:center;
+}
+
+.partner{
+  background: #fff;
+  border:1px solid rgba(0,0,0,.08);
+  border-radius:20px;
+  padding:22px;
+  display:grid;
+  place-items:center;
+  transition: transform 220ms var(--ease),
+              box-shadow 220ms var(--ease),
+              background 220ms var(--ease),
+              border-color 220ms var(--ease);
+  box-shadow: var(--shadow-soft);
+}
+
+.partner:hover{
+  transform: translateY(-3px) scale(1.02);
+  background: #fff;
+  border-color: rgba(255,122,0,.28);
+  box-shadow: 0 20px 40px rgba(0,0,0,.12);
+}
+
+.partner img{
+  max-width:140px;
+  max-height:70px;
+  object-fit:contain;
+  opacity:.95;
+  transition: transform 220ms var(--ease), opacity 220ms var(--ease);
+}
+.partner:hover img{
+  transform: scale(1.03);
+  opacity:1;
+}
+  </style>
+</head>
+
+<body>
+  <header class="topbar" id="topbar">
+    <div class="wrap topbar-inner">
+      <a class="brand reveal is-visible" href="#topo" aria-label="Ir para o topo">
+        <div class="logo" aria-hidden="true">
+          <img src="assets/logo.png" alt="Logo GRÁFICA SAGA" />
+        </div>
+        <div class="brand-text">
+          <strong>GRÁFICA SAGA</strong>
+          <span>Gráfica em Uberlândia • MG</span>
+        </div>
+      </a>
+
+      <nav aria-label="Navegação" class="reveal is-visible">
+        <a href="#produtos">Produtos</a>
+        <a href="#mostruario">Mostruário</a>
+        <a href="#avaliacoes">Avaliações</a>
+        <a href="#horarios">Horários</a>
+        <a href="#localizacao">Localização</a>
+        <a href="#contato">Contato</a>
+      </nav>
+
+      <a class="btn btn-primary reveal is-visible" href="#contato">Fazer orçamento</a>
+    </div>
+  </header>
+
+  <main id="topo" class="wrap">
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-grid">
+        <div class="hero-card reveal is-visible">
+          <span class="tag">Impressão • Acabamento • Personalizados</span>
+          <h1>Qualidade e prazo com atendimento de confiança.</h1>
+          <p class="sub">
+            A <strong>GRÁFICA SAGA</strong> atende Uberlândia e região com produtos de divulgação, escritório e impressão digital.
+            Peça seu orçamento e receba retorno rápido.
+          </p>
+
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="https://wa.me/5534920002591" target="_blank" rel="noopener">📲 WhatsApp</a>
+            <a class="btn btn-ghost" href="tel:+553432354163">Ligar: (34) 3235-4163</a>
+            <a class="btn btn-ghost" href="mailto:comercial@graficagaia.com.br">✉️ E-mail comercial</a>
+          </div>
+
+          <div class="stats">
+            <div class="stat"> <strong>4,8 ★</strong> <span>104 avaliações (Google)</span> </div>
+            <div class="stat"> <strong>Entrega no prazo</strong> <span>foco em produção e qualidade</span> </div>
+            <div class="stat"> <strong>Orçamento rápido</strong> <span>atendimento por WhatsApp</span> </div>
+            <div class="stat"> <strong>+10 anos</strong> <span>experiência no mercado gráfico</span> </div>
+          </div>
+        </div>
+
+        <aside class="side reveal delay-1">
+          <div class="kv">
+            <div class="icon">📍</div>
+            <div>
+              <strong>Endereço</strong>
+              <div class="muted">Av. Afonso Pena, 3268 — Uberlândia - MG, 38400-710</div>
+            </div>
+
+            <div class="icon">🕒</div>
+            <div>
+              <strong>Horário</strong>
+              <div class="muted">Fechado agora • Abre <span id="abreQuando">seg.</span> às 08:00</div>
+            </div>
+
+            <div class="icon">📸</div>
+            <div>
+              <strong>Instagram</strong>
+              <div class="muted">@grafica_saga</div>
+            </div>
+
+            <div class="icon">✉️</div>
+            <div>
+              <strong>E-mail</strong>
+              <div class="muted">comercial@graficagaia.com.br</div>
+            </div>
+          </div>
+
+          <div class="mini-links">
+            <a href="https://www.instagram.com/grafica_saga/" target="_blank" rel="noopener">Instagram</a>
+            <a href="#localizacao">Ver mapa</a>
+            <a href="#contato">Contato</a>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- PRODUTOS -->
+    <section id="produtos" class="products">
+      <div class="section-title reveal">
+        <h2>Produtos</h2>
+        <p>Itens populares e personalizados.</p>
+      </div>
+
+      <div class="grid">
+        <article class="card item reveal"><span class="pill">Bares e Restaurantes</span><h3>Comandas personalizadas</h3><p>Comandas com impressão nítida e acabamento resistente.</p></article>
+        <article class="card item reveal delay-1"><span class="pill">Divulgação</span><h3>Livros personalizados</h3><p>Projetos especiais com capa e miolo sob medida.</p></article>
+        <article class="card item reveal delay-2"><span class="pill">Divulgação</span><h3>Sacolas personalizadas</h3><p>Sacolas com identidade visual para sua marca.</p></article>
+        <article class="card item reveal"><span class="pill">Escritório</span><h3>Calendários</h3><p>Modelos de mesa ou parede para clientes e equipe.</p></article>
+        <article class="card item reveal delay-1"><span class="pill">Escritório</span><h3>Agendas personalizadas</h3><p>Agendas com capa customizada para empresas e eventos.</p></article>
+        <article class="card item reveal delay-2"><span class="pill">Cartazes</span><h3>Cartaz de oferta</h3><p>Cartazes de precificação com alta legibilidade.</p></article>
+        <article class="card item reveal"><span class="pill">Impressão Digital</span><h3>Etiquetas adesivas</h3><p>Etiquetas para produtos, embalagens e logística.</p></article>
+        <article class="card item reveal delay-1"><span class="pill">Impressão Digital</span><h3>Adesivos personalizados</h3><p>Recorte e acabamento profissional para sua marca.</p></article>
+        <article class="card item reveal delay-2"><span class="pill">Divulgação</span><h3>Folders</h3><p>Apresente seus serviços e produtos com impacto.</p></article>
+      </div>
+    </section>
+
+    <!-- MOSTRUÁRIO -->
+    <section id="mostruario" class="showcase">
+      <div class="section-title reveal">
+        <h2>Mostruário</h2>
+    
+      </div>
+
+      <div class="grid">
+        <article class="card shot reveal">
+          <div class="shot-top">
+            <img src="assets/Cartao-de-visita-atualizado-saga-sem-fundo-300x238.webp" alt="Cartão de visita - Gráfica Saga" loading="lazy" width="340" height="170">
+          </div>
+          <div class="shot-body">
+            <span class="shot-pill">Cartão de visita</span>
+            <h3>Cartões com acabamento profissional</h3>
+            <p>Impressão nítida, ótima apresentação e opções de papel/acabamento.</p>
+            <div class="shot-meta">
+              <span class="meta-chip blue">Impressão premium</span>
+              <span class="meta-chip">Corte preciso</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="card shot reveal delay-1">
+          <div class="shot-top">
+            <img src="assets/Livro-sem-fundo.webp" alt="Livro personalizado - Gráfica Saga" loading="lazy" width="340" height="170">
+          </div>
+          <div class="shot-body">
+            <span class="shot-pill">Livro personalizado</span>
+            <h3>Livro capa e miolo sob medida</h3>
+            <p>Perfeito para projetos autorais, catálogos e materiais especiais.</p>
+            <div class="shot-meta">
+              <span class="meta-chip blue">Acabamento</span>
+              <span class="meta-chip">Durabilidade</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="card shot reveal delay-2">
+          <div class="shot-top">
+            <img src="assets/Panfleto-grafica-saga-sem-fundo.webp" alt="Revista / catálogo - Gráfica Saga" loading="lazy" width="340" height="170">
+          </div>
+          <div class="shot-body">
+            <span class="shot-pill">Revista / Catálogo</span>
+            <h3>Revistas e catálogos com impacto</h3>
+            <p>Boa leitura, visual limpo e impressão consistente em grandes tiragens.</p>
+            <div class="shot-meta">
+              <span class="meta-chip blue">Cores vivas</span>
+              <span class="meta-chip">Padronização</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="card shot reveal">
+          <div class="shot-top">
+            <img src="assets/Revista-grafica-saga-sem-fundo-scaled.webp" alt="Panfletos e folders - Gráfica Saga" loading="lazy" width="340" height="170">
+          </div>
+          <div class="shot-body">
+            <span class="shot-pill">Panfletos / Folders</span>
+            <h3>Divulgação com alta legibilidade</h3>
+            <p>Ideal para promoções, eventos e campanhas. Vários formatos e gramaturas.</p>
+            <div class="shot-meta">
+              <span class="meta-chip blue">Custo-benefício</span>
+              <span class="meta-chip">Entrega rápida</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="card shot reveal delay-1">
+          <div class="shot-top">
+            <img src="assets/mostruario.png" alt="Mostruário - Gráfica Saga" loading="lazy" width="340" height="170">
+          </div>
+          <div class="shot-body">
+            <span class="shot-pill">Mostruário</span>
+            <h3>Peças com acabamento premium</h3>
+            <p>Seleção de materiais para comparar acabamento e qualidade.</p>
+            <div class="shot-meta">
+              <span class="meta-chip blue">Acabamento</span>
+              <span class="meta-chip">Qualidade</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="card shot reveal delay-2">
+          <div class="shot-top">
+            <img src="assets/sacola-sem-fundo-grafica-saga.webp" alt="Sacola personalizada - Gráfica Saga" loading="lazy" width="340" height="170">
+          </div>
+          <div class="shot-body">
+            <span class="shot-pill">Sacolas</span>
+            <h3>Sacolas personalizadas para sua marca</h3>
+            <p>Ótimas para lojas, brindes e eventos — visual forte e profissional.</p>
+            <div class="shot-meta">
+              <span class="meta-chip blue">Identidade visual</span>
+              <span class="meta-chip">Personalização</span>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <div class="reveal" style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
+        <a class="btn btn-primary" href="https://wa.me/5534920002591" target="_blank" rel="noopener">📲 Falar no WhatsApp</a>
+      </div>
+    </section>
+
+    <!-- AVALIAÇÕES -->
+    <section id="avaliacoes" class="reviews">
+      <div class="section-title reveal">
+        <h2>Avaliações</h2>
+        <p>Alguns comentários do Google.</p>
+      </div>
+
+      <div class="rating-summary reveal">
+        <div class="rating-score">
+          <strong>4,8</strong>
+          <div class="rating-stars" aria-label="4,8 de 5 estrelas">★★★★★</div>
+          <span>104 avaliações</span>
+        </div>
+        <div class="rating-bars" aria-hidden="true">
+          <div class="rating-row"><span class="label">5</span><span class="bar" data-fill="5"><i></i></span></div>
+          <div class="rating-row"><span class="label">4</span><span class="bar" data-fill="4"><i></i></span></div>
+          <div class="rating-row"><span class="label">3</span><span class="bar" data-fill="3"><i></i></span></div>
+          <div class="rating-row"><span class="label">2</span><span class="bar" data-fill="2"><i></i></span></div>
+          <div class="rating-row"><span class="label">1</span><span class="bar" data-fill="1"><i></i></span></div>
+        </div>
+      </div>
+
+      <div class="grid">
+        <blockquote class="card quote reveal"><p>“Resposta rápida, muito eficientes e educados! Me passaram todas as informações que eu precisava em menos de 5 minutos. Muito claro sobre a entrega e ótimos produtos. Adorei o serviço.”</p><footer>— Julia Fonseca Ramos</footer></blockquote>
+        <blockquote class="card quote reveal delay-1"><p>“Excelente serviço, recomendo muito! … solução melhor, com mais qualidade e valor compatível… atendimento excelente.”</p><footer>— Thais Guerra Braga</footer></blockquote>
+        <blockquote class="card quote reveal"><p>“Solicitei um orçamento e fui atendida com agilidade e prontidão… Atendimento cordial e eficiente.”</p><footer>— Adriana Sousa</footer></blockquote>
+        <blockquote class="card quote reveal delay-2 is-hidden"><p>“Atendimento sempre muito bom… ajudando no que for preciso para que tudo dê certo com nossas demandas.”</p><footer>— Karoline de Paula Pereira</footer></blockquote>
+        <blockquote class="card quote reveal is-hidden"><p>“Excelente atendimento. Entrega no prazo e o material ficou lindo demais.”</p><footer>— Kelly Kamke</footer></blockquote>
+        <blockquote class="card quote reveal delay-1 is-hidden"><p>“Execelente prestador de serviços, atendimento e materias de primeira.”</p><footer>— Siqueira Comunicação</footer></blockquote>
+        <blockquote class="card quote reveal delay-2 is-hidden"><p>“Atendimento da Rafaela muito atencioso. Vou certamente fazer meus próximos trabalhos de impressão com eles!!”</p><footer>— marta ufsc</footer></blockquote>
+        <blockquote class="card quote reveal is-hidden"><p>“Mudei de fornecedor porque o preço é melhor e qualidade também, além de fazer entrega para os meus clientes.”</p><footer>— Arte Uberlandia</footer></blockquote>
+        <blockquote class="card quote reveal delay-1 is-hidden"><p>“Ótimo atendimento, produtos de qualidade e preço super acessível.”</p><footer>— ANA LUIZA CAMPOS SILVA</footer></blockquote>
+        <blockquote class="card quote reveal delay-2 is-hidden"><p>“Ótimo atendimento e equipe de funcionários prestativos e qualificados!”</p><footer>— Heliograf Copiadora</footer></blockquote>
+        <blockquote class="card quote reveal is-hidden"><p>“Trabalho excelente, prazo, atendimento tudo perfeito.”</p><footer>— Recepção Audibel</footer></blockquote>
+        <blockquote class="card quote reveal delay-1 is-hidden"><p>“Ótimo atendimento, produtos de primeira.”</p><footer>— Vitor Oliveira Vieira</footer></blockquote>
+        <blockquote class="card quote reveal delay-2 is-hidden"><p>“Atendimento ótimo, qualidade do serviço impecável. Preço super justo para a qualidade que entrega!”</p><footer>— Rafaela Santos</footer></blockquote>
+        <blockquote class="card quote reveal is-hidden"><p>“Muito atenção e profissionalismo... recomendo!”</p><footer>— Mário Della Negra Filho</footer></blockquote>
+        <blockquote class="card quote reveal delay-1 is-hidden"><p>“Ótimo atendimento, Rafaela sempre atenciosa com minhas dúvidas. Parabéns.”</p><footer>— giane dasilva</footer></blockquote>
+        <blockquote class="card quote reveal delay-2 is-hidden"><p>“Extremamente parceiros!! Atendimento diferenciado com dedicação e qualidade nos serviços!!”</p><footer>— PEDRO NUNES</footer></blockquote>
+        <blockquote class="card quote reveal is-hidden"><p>“Gráfica excelente, material muito bom e preço justo. Pode confiar!”</p><footer>— Pablo Tidre</footer></blockquote>
+        <blockquote class="card quote reveal delay-1 is-hidden"><p>“Fui muito bem atendida.”</p><footer>— Gabriela</footer></blockquote>
+        <blockquote class="card quote reveal delay-2 is-hidden"><p>“Faço sempre com eles! Os melhores.”</p><footer>— Lorrany Rodrigues</footer></blockquote>
+        <blockquote class="card quote reveal is-hidden"><p>“Rafaela foi super atenciosa e prestativa.”</p><footer>— Jessica Machado Borges</footer></blockquote>
+        <blockquote class="card quote reveal delay-1 is-hidden"><p>“Fiz cartão de visita… material excelente… pela qualidade compensou demais.”</p><footer>— Veronica Thais</footer></blockquote>
+        <blockquote class="card quote reveal delay-2 is-hidden"><p>“Atendimento de primeira, como seus produtos gráficos!”</p><footer>— Marielly Lopes</footer></blockquote>
+        <blockquote class="card quote reveal is-hidden"><p>“Fui muito bem atendida por todos da equipe! Super indico!”</p><footer>— angelica Teixeira</footer></blockquote>
+        <blockquote class="card quote reveal delay-1 is-hidden"><p>“Serviço prestado… profissionalismo e serviço de altíssima qualidade.”</p><footer>— Mídia Audi Comunicação</footer></blockquote>
+        <blockquote class="card quote reveal delay-2 is-hidden"><p>“Excelente atendimento e preços.”</p><footer>— Minas Horta</footer></blockquote>
+        <blockquote class="card quote reveal is-hidden"><p>“Rápido, eficiência e com qualidade.”</p><footer>— Márcio Filho (Marciotetraplegico)</footer></blockquote>
+        <blockquote class="card quote reveal delay-1 is-hidden"><p>“Atendimento de excelência! Ótima qualidade!”</p><footer>— Aline Estrela</footer></blockquote>
+        <blockquote class="card quote reveal delay-2 is-hidden"><p>“Atendimento dentro das minhas expectativas. Pessoal qualificado e material de ótima qualidade.”</p><footer>— marcia azevedo</footer></blockquote>
+        <blockquote class="card quote reveal is-hidden"><p>“Very good service. Fast and professional.”</p><footer>— Guibin</footer></blockquote>
+        <blockquote class="card quote reveal delay-1 is-hidden"><p>“Excelente prestador de serviço! Sempre com um bom atendimento.”</p><footer>— Renata Nogueira</footer></blockquote>
+        <blockquote class="card quote reveal delay-2 is-hidden"><p>“ÓTIMA QUALIDADE… PROFISSIONAIS DEDICADOS… RECOMENDO DEMAIS!”</p><footer>— Juliana Marques</footer></blockquote>
+        <blockquote class="card quote reveal is-hidden"><p>“Cliente há muito tempo… atendimento top… material de primeira.”</p><footer>— Jenes Jhonatan</footer></blockquote>
+        <blockquote class="card quote reveal delay-1 is-hidden"><p>“Foi uma maravilha 👍👏👏👏”</p><footer>— João Uelton Alves de Oliveira</footer></blockquote>
+        <blockquote class="card quote reveal delay-2 is-hidden"><p>“Excelente atendimento, agilidade e qualidade… super indico!”</p><footer>— Márcia Cristina</footer></blockquote>
+        <blockquote class="card quote reveal is-hidden"><p>“Experiência satisfatória!”</p><footer>— Rafael Campos</footer></blockquote>
+        <blockquote class="card quote reveal delay-1 is-hidden"><p>“Excelente Atendimento.”</p><footer>— William Rafael</footer></blockquote>
+        <blockquote class="card quote reveal delay-2 is-hidden"><p>“Serviço top de qualidade e um ótimo atendimento.”</p><footer>— Raul Chester</footer></blockquote>
+        <blockquote class="card quote reveal is-hidden"><p>“Muito bem atendido… esclareceu todas as minhas dúvidas.”</p><footer>— Marcos Soares Advocacia</footer></blockquote>
+      </div>
+      <div class="reveal" style="margin-top:14px; display:flex; justify-content:center;">
+        <button class="btn btn-ghost" id="reviewsToggle" type="button" aria-expanded="false">Ver mais avaliações</button>
+      </div>
+    </section>
+
+    <!-- HORÁRIOS + MAPA -->
+    <section id="horarios">
+      <div class="section-title reveal">
+        <h2>Horário & Localização</h2>
+        
+      </div>
+
+      <div class="two-col">
+        <div class="card hours reveal">
+          <ul id="listaHorarios">
+            <li data-dow="1"><span>Segunda</span><strong>08:00 – 18:00</strong></li>
+            <li data-dow="2"><span>Terça</span><strong>08:00 – 18:00</strong></li>
+            <li data-dow="3"><span>Quarta</span><strong>08:00 – 18:00</strong></li>
+            <li data-dow="4"><span>Quinta</span><strong>08:00 – 18:00</strong></li>
+            <li data-dow="5"><span>Sexta</span><strong>08:00 – 18:00</strong></li>
+            <li data-dow="6"><span>Sábado</span><strong>08:00 – 12:00</strong></li>
+            <li data-dow="0" class="closed"><span>Domingo</span><strong>Fechado</strong></li>
+          </ul>
+          <p style="margin:12px 0 0; color:var(--muted); font-size:13px;">
+            
+          </p>
+        </div>
+
+        <div class="card reveal delay-1" id="localizacao">
+          <iframe
+            title="Mapa - GRÁFICA SAGA"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            src="https://www.google.com/maps?q=Av.%20Afonso%20Pena%2C%203268%20Uberl%C3%A2ndia%20MG%2038400-710&output=embed"></iframe>
+
+          <div style="margin-top:10px; display:flex; gap:10px; flex-wrap:wrap;">
+            <a class="btn btn-ghost" target="_blank" rel="noopener"
+              href="https://www.google.com/maps/search/?api=1&query=Av.%20Afonso%20Pena%2C%203268%20Uberl%C3%A2ndia%20MG%2038400-710">🗺️ Abrir no Google Maps</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTATO -->
+    <section id="contato">
+      <div class="section-title reveal">
+        <h2>Contato</h2>
+        <p>Orçamento e atendimento.</p>
+      </div>
+
+      <div class="grid">
+        <div class="card reveal" style="grid-column: span 12;">
+          <h3 style="margin:0 0 10px;">Fale com a gente</h3>
+          <p class="muted" style="margin:0 0 12px;">Envie os detalhes do seu pedido e retornamos com valores e prazos.</p>
+
+          <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <a class="btn btn-primary" href="https://wa.me/5534920002591" target="_blank" rel="noopener">📲 WhatsApp</a>
+            <a class="btn btn-ghost" href="tel:+553432354163">Ligar: (34) 3235-4163</a>
+            <a class="btn btn-ghost" href="mailto:comercial@graficagaia.com.br">✉️ E-mail</a>
+          </div>
+
+          <div class="badges">
+            <a class="badge" href="https://www.instagram.com/grafica_saga/" target="_blank" rel="noopener">📸 @grafica_saga</a>
+            <a class="badge" href="#localizacao">📍 Ver localização</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <!-- CLIENTES & PARCEIROS -->
+<section class="partners">
+  <div class="wrap">
+
+    <div class="section-title reveal">
+      <h2>Clientes & Parceiros</h2>
+      <p>Empresas que confiam na Gráfica Saga.</p>
+    </div>
+
+    <div class="partners-grid reveal">
+
+      <div class="partner">
+        <img src="assets/logo-jornal-diario-uberlandia-BRANCA.webp" alt="Jornal Diário de Uberlândia" loading="lazy" width="140" height="70">
+      </div>
+
+      <div class="partner">
+        <img src="assets/logo-Ld-celulose-grafica-gaia-uberlandia-branca.webp" alt="LD Celulose" loading="lazy" width="140" height="70">
+      </div>
+
+      <div class="partner">
+        <img src="assets/logo-algar-parceira-grafica-gaia-uberlandia.webp" alt="Algar" loading="lazy" width="140" height="70">
+      </div>
+
+      <div class="partner">
+        <img src="assets/logo-adm-parceira-grafica-gaia-uberlandia.webp" alt="ADM" loading="lazy" width="140" height="70">
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+  <footer class="footer">
+    <div class="wrap">
+      <div class="footer-cta reveal">
+        <div>
+          <strong style="font-size:16px;">Pronto pra imprimir com qualidade?</strong><br />
+          <span class="muted" style="font-size:13px;">Clique e peça seu orçamento agora.</span>
+        </div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <a class="btn btn-primary" href="https://wa.me/5534920002591" target="_blank" rel="noopener">📲 WhatsApp</a>
+          <a class="btn btn-ghost" href="tel:+553432354163">Ligar</a>
+        </div>
+      </div>
+
+      <div class="footer-inner">
+        <div>
+          <strong style="color:#222;">GRÁFICA SAGA</strong><br />
+
+        </div>
+        <div>
+          <span>© <span id="ano"></span> — Versão Beta</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Ano
+    document.getElementById("ano").textContent = new Date().getFullYear();
+
+    // Destaque do dia de hoje
+    (function(){
+      const dow = new Date().getDay();
+      const li = document.querySelector(`#listaHorarios li[data-dow="${dow}"]`);
+      if(li) li.classList.add("today");
+      const abreQuando = document.getElementById("abreQuando");
+      if (abreQuando) abreQuando.textContent = "seg.";
+    })();
+
+    // Header muda quando rola
+    const topbar = document.getElementById("topbar");
+    const onScroll = () => {
+      if (window.scrollY > 10) topbar.classList.add("is-scrolled");
+      else topbar.classList.remove("is-scrolled");
+    };
+    window.addEventListener("scroll", onScroll, { passive:true });
+    onScroll();
+
+    // Reveal on scroll (IntersectionObserver)
+    const prefersReduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (!prefersReduced && "IntersectionObserver" in window) {
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+            io.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12 });
+
+      document.querySelectorAll(".reveal:not(.is-visible)").forEach(el => io.observe(el));
+      const showcase = document.querySelector(".showcase");
+      if (showcase) io.observe(showcase);
+    } else {
+      document.querySelectorAll(".reveal").forEach(el => el.classList.add("is-visible"));
+      const showcase = document.querySelector(".showcase");
+      if (showcase) showcase.classList.add("is-visible");
+    }
+
+    // Mostrar mais avaliações
+    (function(){
+      const reviews = document.getElementById("avaliacoes");
+      const toggle = document.getElementById("reviewsToggle");
+      if (!reviews || !toggle) return;
+      const hidden = reviews.querySelectorAll(".quote.is-hidden");
+      if (hidden.length === 0) {
+        toggle.style.display = "none";
+        return;
+      }
+      toggle.addEventListener("click", () => {
+        const expanded = reviews.classList.toggle("is-expanded");
+        toggle.setAttribute("aria-expanded", expanded ? "true" : "false");
+        toggle.textContent = expanded ? "Ver menos avaliações" : "Ver mais avaliações";
+        if (expanded) {
+          hidden.forEach(el => el.classList.add("is-visible"));
+        }
+      });
+    })();
+
+    // Spotlight suave dos produtos no primeiro scroll
+    (function(){
+      const section = document.getElementById("produtos");
+      if (!section) return;
+      const items = Array.from(section.querySelectorAll(".products .item"));
+      if (items.length === 0) return;
+      let played = false;
+
+      const runSpotlight = () => {
+        if (played) return;
+        played = true;
+        let i = 0;
+        const step = () => {
+          items.forEach((el, idx) => {
+            el.classList.toggle("spotlight", idx === i);
+            el.classList.toggle("dim", idx !== i);
+          });
+          i += 1;
+          if (i < items.length) {
+            setTimeout(step, 220);
+          } else {
+            setTimeout(() => {
+              items.forEach(el => el.classList.remove("spotlight", "dim"));
+            }, 260);
+          }
+        };
+        step();
+      };
+
+      if ("IntersectionObserver" in window) {
+        const io = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              runSpotlight();
+              io.disconnect();
+            }
+          });
+        }, { threshold: 0.18 });
+        io.observe(section);
+      } else {
+        window.addEventListener("scroll", runSpotlight, { passive:true, once:true });
+      }
+    })();
+  </script>
+</body>
+</html>
