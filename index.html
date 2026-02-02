@@ -348,6 +348,18 @@
       overflow:hidden;
       transition: transform 240ms var(--ease), box-shadow 240ms var(--ease), border-color 240ms var(--ease);
     }
+    .card:before{
+      content:"";
+      position:absolute;
+      width:220px;
+      height:220px;
+      border-radius:50%;
+      right:-120px;
+      top:-140px;
+      background: radial-gradient(circle at 30% 30%, rgba(255,122,0,.08), rgba(255,122,0,0) 70%);
+      opacity:.8;
+      pointer-events:none;
+    }
     .card:hover{
       transform: translateY(-3px);
       box-shadow: 0 22px 48px rgba(0,0,0,.12);
@@ -490,6 +502,18 @@
     .reviews .quote{grid-column: span 4; min-height:150px; display:flex; flex-direction:column; gap:10px; border-left:6px solid rgba(255,122,0,.35);}
     .reviews .quote p{margin:0; font-size:14px}
     .reviews .quote footer{margin-top:auto; color:var(--muted); font-size:13px}
+    .reviews .quote:before{
+      content:"";
+      position:absolute;
+      width:200px;
+      height:200px;
+      border-radius:50%;
+      left:-110px;
+      bottom:-120px;
+      background: radial-gradient(circle at 30% 30%, rgba(255,122,0,.10), rgba(255,122,0,0) 70%);
+      opacity:.7;
+      pointer-events:none;
+    }
     .reviews .quote.is-hidden{display:none;}
     .reviews.is-expanded .quote.is-hidden{display:flex;}
     .rating-summary{
@@ -734,7 +758,7 @@ img, svg, video, canvas {
             <div class="icon">🕒</div>
             <div>
               <strong>Horário</strong>
-              <div class="muted">Fechado agora • Abre <span id="abreQuando">seg.</span> às 08:00</div>
+              <div class="muted"><span id="abreQuando">Fechado agora</span></div>
             </div>
 
             <div class="icon">📸</div>
@@ -1075,13 +1099,62 @@ img, svg, video, canvas {
     // Ano
     document.getElementById("ano").textContent = new Date().getFullYear();
 
-    // Destaque do dia de hoje
+    // Destaque do dia de hoje + status (aberto/fechado)
     (function(){
-      const dow = new Date().getDay();
+      const now = new Date();
+      const dow = now.getDay(); // 0=dom
       const li = document.querySelector(`#listaHorarios li[data-dow="${dow}"]`);
-      if(li) li.classList.add("today");
-      const abreQuando = document.getElementById("abreQuando");
-      if (abreQuando) abreQuando.textContent = "seg.";
+      if (li) li.classList.add("today");
+
+      const schedule = {
+        0: null,         // domingo fechado
+        1: [8, 18],
+        2: [8, 18],
+        3: [8, 18],
+        4: [8, 18],
+        5: [8, 18],
+        6: [8, 12],
+      };
+
+      const statusEl = document.getElementById("abreQuando");
+      if (!statusEl) return;
+
+      const pad = (n) => String(n).padStart(2, "0");
+      const fmt = (h) => `${pad(h)}:00`;
+      const dayNames = ["dom.", "seg.", "ter.", "qua.", "qui.", "sex.", "sáb."];
+
+      const todayHours = schedule[dow];
+      const nowMinutes = now.getHours() * 60 + now.getMinutes();
+
+      const nextOpenDay = () => {
+        for (let i = 1; i <= 7; i += 1) {
+          const nd = (dow + i) % 7;
+          if (schedule[nd]) return nd;
+        }
+        return 1;
+      };
+
+      if (!todayHours) {
+        const nd = nextOpenDay();
+        statusEl.textContent = `Abre ${dayNames[nd]} às ${fmt(schedule[nd][0])}`;
+        return;
+      }
+
+      const openMinutes = todayHours[0] * 60;
+      const closeMinutes = todayHours[1] * 60;
+
+      if (nowMinutes >= openMinutes && nowMinutes < closeMinutes) {
+        statusEl.textContent = `Aberto agora • Abre às ${fmt(todayHours[0])} e Fecha às ${fmt(todayHours[1])}`;
+        return;
+      }
+
+      if (nowMinutes < openMinutes) {
+        statusEl.textContent = `Fechado agora • Abre às ${fmt(todayHours[0])} e Fecha às ${fmt(todayHours[1])}`;
+        return;
+      }
+
+      const nd = nextOpenDay();
+      statusEl.textContent = `Fechado agora • Abre ${dayNames[nd]} às ${fmt(schedule[nd][0])}`;
     })();
 
     // Header muda quando rola
