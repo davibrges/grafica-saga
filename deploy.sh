@@ -1,0 +1,33 @@
+#!/bin/bash
+set -e
+
+echo "🔄 Syncing with GitHub..."
+
+git rev-parse --is-inside-work-tree >/dev/null 2>&1 || { echo "❌ Not inside a git repository."; exit 1; }
+
+git checkout main
+git fetch origin
+git pull --rebase origin main
+
+echo "📂 Checking for changes..."
+git status --short
+
+git add .
+
+if git diff --cached --quiet; then
+  echo "⚠️ No changes to commit."
+else
+  TIMESTAMP=$(date "+%Y-%m-%d %H:%M:%S")
+  git commit -m "deploy: update site @ $TIMESTAMP"
+  git push origin main
+  echo "✅ Changes pushed to GitHub."
+fi
+
+echo ""
+read -p "❓ Close VS Code now? (y/N): " close
+if [[ "$close" == "y" || "$close" == "Y" ]]; then
+  pkill -f code || true
+  echo "🧹 VS Code closed."
+fi
+
+echo "🏁 Deploy finished."
