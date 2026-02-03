@@ -33,7 +33,7 @@ else
   echo "✅ Changes pushed to GitHub."
 fi
 
-echo ""
+echo "" 
 echo "ℹ️ Make sure all files are saved in VS Code."
 read -p "❓ Close VS Code now? (y/N): " close
 

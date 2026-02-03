@@ -12,6 +12,7 @@
   <link rel="preload" as="image" href="assets/logo.png" />
   <title>GRÁFICA SAGA — Gráfica em Uberlândia – MG | Impressão premium</title>
   <meta name="description" content="Gráfica em Uberlândia – MG com impressão profissional, acabamento premium e atendimento rápido. Peça orçamento pelo WhatsApp agora." />
+  <meta name="keywords" content="gráfica uberlândia, impressão rápida, cartões de visita, folders, adesivos, gráfica em uberlândia mg" />
   <!-- SEO: troque pela URL oficial quando publicar -->
   <link rel="canonical" href="https://SEU-DOMINIO-AQUI/" />
 
@@ -19,6 +20,10 @@
   <!-- <link rel="icon" href="/favicon.ico" sizes="any" /> -->
   <!-- <link rel="icon" href="/favicon.svg" type="image/svg+xml" /> -->
   <!-- <link rel="apple-touch-icon" href="/apple-touch-icon.png" /> -->
+  <!-- PWA: crie o apple-touch-icon em /apple-touch-icon.png -->
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <!-- PWA: crie o mask-icon em /safari-pinned-tab.svg -->
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#FF7A00" />
   <!-- Manifest PWA -->
   <link rel="manifest" href="/site.webmanifest" />
 
@@ -27,6 +32,7 @@
   <meta property="og:title" content="GRÁFICA SAGA — Gráfica em Uberlândia – MG | Impressão premium" />
   <meta property="og:description" content="Impressão profissional, acabamento premium e atendimento rápido. Peça orçamento pelo WhatsApp." />
   <!-- TODO: criar a imagem em assets/og-saga.jpg -->
+  <!-- Criar imagem OG 1200x630 com logo + gradiente + frase -->
   <meta property="og:image" content="assets/og-saga.jpg" />
   <meta property="og:url" content="https://SEU-DOMINIO-AQUI/" />
   <meta property="og:locale" content="pt_BR" />
@@ -36,6 +42,7 @@
   <meta name="twitter:title" content="GRÁFICA SAGA — Gráfica em Uberlândia – MG | Impressão premium" />
   <meta name="twitter:description" content="Impressão profissional, acabamento premium e atendimento rápido. Peça orçamento pelo WhatsApp." />
   <!-- TODO: criar a imagem em assets/og-saga.jpg -->
+  <!-- Criar imagem OG 1200x630 com logo + gradiente + frase -->
   <meta name="twitter:image" content="assets/og-saga.jpg" />
 
   <!-- JSON-LD LocalBusiness -->
@@ -66,7 +73,6 @@
         "ratingValue": "4.8",
         "reviewCount": "104"
       }
-      /* "geo": { "@type": "GeoCoordinates", "latitude": -18.91, "longitude": -48.27 } */
     }
   </script>
 
@@ -99,7 +105,7 @@
 
     *{box-sizing:border-box}
     html,body{height:100%}
-    html{scroll-padding-top:88px;}
+    html{scroll-padding-top:88px; scroll-behavior:smooth;}
     body{
       margin:0;
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
@@ -227,6 +233,11 @@
       transform: translateY(-1px);
       color:#111;
     }
+    nav a.active{
+      background: rgba(255,122,0,.14);
+      border-color: rgba(255,122,0,.28);
+      color:#111;
+    }
     @media (max-width: 980px){ nav{display:none;} }
     .topbar .btn{margin-left:8px;}
 
@@ -246,6 +257,26 @@
       transition: transform 160ms var(--ease), box-shadow 220ms var(--ease), background 220ms var(--ease), border-color 220ms var(--ease), filter 220ms var(--ease);
       position:relative;
       overflow:hidden;
+    }
+    /* Ripple discreto nos botões */
+    .btn .ripple{
+      position:absolute;
+      border-radius:999px;
+      transform: scale(0);
+      animation: ripple 600ms var(--ease);
+      background: rgba(255,255,255,.45);
+      pointer-events:none;
+    }
+    @keyframes ripple{
+      to{transform: scale(8); opacity:0;}
+    }
+    /* Foco visível para teclado */
+    .btn:focus-visible,
+    a:focus-visible,
+    button:focus-visible{
+      outline: 3px solid rgba(255,122,0,.45);
+      outline-offset: 3px;
+      border-radius: 999px;
     }
     .btn:active{transform: translateY(1px) scale(.99)}
     .btn-primary{
@@ -321,9 +352,42 @@
       line-height:1.05;
       letter-spacing:-.8px;
     }
+    .headline-nowrap{white-space:nowrap;}
+    @media (max-width: 560px){ .headline-nowrap{white-space:normal;} }
     @media (max-width: 560px){ h1{font-size:30px} }
     .sub{margin:0; color:var(--muted); font-size:15px; max-width:70ch;}
     .hero-actions{margin-top:18px; display:flex; gap:10px; flex-wrap:wrap;}
+    .hero-contacts{flex-wrap:nowrap;}
+    .hero-contacts .btn{font-size:13px; padding:10px 12px;}
+    @media (max-width: 1100px){ .hero-contacts{flex-wrap:wrap;} }
+    .hero-quick{
+      display:grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap:10px;
+    }
+    .hero-quick .btn{justify-content:center; white-space:nowrap;}
+    @media (max-width: 980px){ .hero-quick{grid-template-columns: repeat(3, minmax(0, 1fr));} }
+    @media (max-width: 560px){ .hero-quick{grid-template-columns: 1fr;} }
+    /* Texto rotativo no hero */
+    .hero-rotator{
+      margin-top:8px;
+      font-size:14px;
+      color:var(--muted);
+      min-height:22px;
+      display:flex; align-items:center;
+      gap:6px;
+    }
+    .hero-rotator span{
+      opacity:0;
+      transform: translateY(6px);
+      transition: opacity 360ms var(--ease), transform 360ms var(--ease);
+    }
+    .hero-rotator span.is-active{
+      opacity:1; transform: translateY(0);
+    }
+    /* Selos premium no hero */
+    .hero-badges{display:flex; gap:10px; flex-wrap:wrap; margin-top:14px;}
+    .hero-badges .badge{border-color: rgba(255,122,0,.2);}
 
     .stats{
       margin-top:18px;
@@ -343,7 +407,7 @@
       transition: transform 220ms var(--ease), box-shadow 220ms var(--ease);
     }
     .stat:hover{transform: translateY(-2px); box-shadow: 0 18px 36px rgba(0,0,0,.10);}
-    .stat strong{display:block; font-size:16px}
+    .stat strong{display:inline-flex; align-items:baseline; gap:4px; font-size:18px; white-space:nowrap;}
     .stat span{display:block; font-size:12px; color:var(--muted)}
 
     /* ====== SIDE ====== */
@@ -391,6 +455,24 @@
       transition: transform 200ms var(--ease), border-color 200ms var(--ease);
     }
     .mini-links a:hover{border-color: rgba(255,122,0,.28); transform: translateY(-1px);}
+    .mini-map{
+      height:180px;
+      border-radius:18px;
+      border:1px solid rgba(0,0,0,.06);
+      background: rgba(0,0,0,.04);
+      overflow:hidden;
+    }
+    .copy-btn{
+      border:1px dashed rgba(0,0,0,.18);
+      background:#fff;
+      padding:6px 10px;
+      border-radius:999px;
+      font-size:12px;
+      cursor:pointer;
+      transition: border-color 200ms var(--ease), transform 200ms var(--ease);
+    }
+    .copy-btn:hover{border-color: rgba(255,122,0,.28); transform: translateY(-1px);}
+    .copy-btn.is-copied{border-color: rgba(255,122,0,.45); color:#7a2f00;}
 
     /* ====== SECTIONS ====== */
     section{padding:42px 0}
@@ -418,6 +500,7 @@
       overflow:hidden;
       transition: transform 240ms var(--ease), box-shadow 240ms var(--ease), border-color 240ms var(--ease);
     }
+    .card.tilt{will-change: transform;}
     .card:before{
       content:"";
       position:absolute;
@@ -632,24 +715,13 @@
     @media (max-width: 980px){ .reviews .quote{grid-column: span 6;} }
     @media (max-width: 560px){ .reviews .quote{grid-column: span 12;} }
 
-    /* Renderização progressiva em seções longas */
-    #avaliacoes,
-    #faq,
-    #arquivos,
-    #horarios,
-    #contato,
-    .partners{
-      content-visibility: auto;
-      contain-intrinsic-size: 800px;
+    .trust-badges{
+      display:flex; gap:10px; flex-wrap:wrap; margin:8px 0 14px;
     }
-
-    /* Reduz custo de sombras/blur em mobile */
-    @media (max-width: 768px){
-      .card, .stat, .footer-cta, .partner, .step, .topbar{
-        box-shadow: 0 8px 18px rgba(0,0,0,.06);
-      }
-      .reveal{filter:none;}
-      .topbar{backdrop-filter: blur(6px);}
+    .trust-badges .badge{
+      background:#fff;
+      border-color: rgba(255,122,0,.18);
+      font-weight:700;
     }
 
     /* ====== COMO PEDIR ORÇAMENTO ====== */
@@ -680,6 +752,11 @@
     .diff .item{grid-column: span 4;}
     @media (max-width: 980px){ .diff .item{grid-column: span 6;} }
     @media (max-width: 560px){ .diff .item{grid-column: span 12;} }
+
+    /* ====== TRABALHOS RECENTES ====== */
+    #trabalhos .item{grid-column: span 4;}
+    @media (max-width: 980px){ #trabalhos .item{grid-column: span 6;} }
+    @media (max-width: 560px){ #trabalhos .item{grid-column: span 12;} }
 
     /* ====== NOSSO PROCESSO ====== */
     .process-steps{display:grid; grid-template-columns: repeat(3, 1fr); gap:18px;}
@@ -791,6 +868,19 @@
       box-shadow: var(--shadow-soft);
       margin-bottom:16px;
     }
+    /* Barra CTA flutuante no rodapé */
+    .footer-cta.is-floating{
+      position:fixed;
+      left:50%;
+      bottom:16px;
+      transform: translateX(-50%);
+      width: calc(100% - 40px);
+      max-width: var(--max);
+      z-index:55;
+    }
+    @media (max-width: 768px){
+      .footer-cta.is-floating{position:static; transform:none; width:auto; max-width:100%;}
+    }
     .footer-inner{
       display:flex; justify-content:space-between; gap:14px; flex-wrap:wrap;
       color:var(--muted);
@@ -880,7 +970,7 @@ img, svg, video, canvas {
     <div class="wrap topbar-inner">
       <a class="brand reveal is-visible" href="#topo" aria-label="Ir para o topo">
         <div class="logo" aria-hidden="true">
-          <img src="assets/logo.png" alt="Logo GRÁFICA SAGA" />
+          <img src="assets/logo.png" alt="Logo GRÁFICA SAGA" width="56" height="56" />
         </div>
         <div class="brand-text">
           <strong>GRÁFICA SAGA</strong>
@@ -897,7 +987,7 @@ img, svg, video, canvas {
         <a href="#contato">Contato</a>
       </nav>
 
-      <a class="btn btn-primary reveal is-visible" href="#contato" aria-label="Ir para contato e fazer orçamento">Fazer orçamento</a>
+      <a class="btn btn-primary reveal is-visible" href="#contato" aria-label="Ir para contato e fazer orçamento" data-cta="nav-orcamento">Receber orçamento e prazo</a>
     </div>
   </header>
 
@@ -907,26 +997,38 @@ img, svg, video, canvas {
       <div class="hero-grid">
         <div class="hero-card reveal is-visible">
           <span class="tag">Impressão • Acabamento • Personalizados</span>
-          <h1>Qualidade e prazo com atendimento de confiança.</h1>
+          <h1><span class="headline-nowrap">Qualidade e prazo com <br>atendimento de confiança.</span></h1>
+          <div class="hero-rotator" aria-live="polite">
+            <span class="is-active">Impressão profissional para empresas de Uberlândia</span>
+          </div>
           <p class="sub">
             A <strong>GRÁFICA SAGA</strong> atende Uberlândia e região com produtos de divulgação, escritório e impressão digital.
             Peça seu orçamento e receba retorno rápido.
           </p>
 
-          <div class="hero-actions">
-            <a class="btn btn-primary" href="https://wa.me/5534920002591" target="_blank" rel="noopener">📲 WhatsApp</a>
-            <a class="btn btn-ghost" href="tel:+553432354163">Ligar: (34) 3235-4163</a>
+          <div class="hero-actions hero-contacts">
+            <a class="btn btn-primary" href="https://wa.me/5534920002591" target="_blank" rel="noopener" data-cta="hero-whatsapp">Iniciar orçamento no WhatsApp</a>
+            <a class="btn btn-ghost" href="tel:+553432354163">Falar com atendente</a>
             <a class="btn btn-ghost" href="mailto:comercial@graficagaia.com.br">✉️ E-mail comercial</a>
           </div>
 
           <div class="stats">
-            <div class="stat"> <strong>4,8 ★</strong> <span>104 avaliações (Google)</span> </div>
+            <div class="stat"> <strong><span data-count="4.8" data-decimals="1">4,8 ★</span>★</strong> <span><span data-count="104">104</span> avaliações (Google)</span> </div>
             <div class="stat"> <strong>Entrega no prazo</strong> <span>foco em produção e qualidade</span> </div>
             <div class="stat"> <strong>Orçamento rápido</strong> <span>atendimento por WhatsApp</span> </div>
-            <div class="stat"> <strong>+10 anos</strong> <span>experiência no mercado gráfico</span> </div>
+            <div class="stat"> <strong>+<span data-count="10">10</span> anos</strong> <span>experiência no mercado gráfico</span> </div>
           </div>
-        </div>
 
+          <div class="hero-actions hero-quick" style="margin-top:12px;">
+
+            <a class="btn btn-ghost" href="https://wa.me/5534920002591?text=Ol%C3%A1!%20Quero%20or%C3%A7amento%20de%20Cart%C3%A3o%20de%20Visita%20(1000%20un),%209x5cm,%204x4.%20Pode%20me%20passar%20op%C3%A7%C3%B5es%20de%20papel/lamina%C3%A7%C3%A3o%20e%20prazo%3F" target="_blank" rel="noopener">Cartão de visita</a>
+            <a class="btn btn-ghost" href="https://wa.me/5534920002591?text=Ol%C3%A1!%20Quero%20or%C3%A7amento%20de%20Adesivos%20(1000%20un),%2010x10cm,%204x0.%20Pode%20me%20passar%20op%C3%A7%C3%B5es%20de%20papel/lamina%C3%A7%C3%A3o%20e%20prazo%3F" target="_blank" rel="noopener">Adesivos</a>
+            <a class="btn btn-ghost" href="https://wa.me/5534920002591?text=Ol%C3%A1!%20Quero%20or%C3%A7amento%20de%20Folders%20(1000%20un),%20A4,%204x4.%20Pode%20me%20passar%20op%C3%A7%C3%B5es%20de%20papel/lamina%C3%A7%C3%A3o%20e%20prazo%3F" target="_blank" rel="noopener">Folders</a>
+            <a class="btn btn-ghost" href="https://wa.me/5534920002591?text=Ol%C3%A1!%20Quero%20or%C3%A7amento%20de%20Etiquetas%20(1000%20un),%205x5cm,%204x0.%20Pode%20me%20passar%20op%C3%A7%C3%B5es%20de%20papel/lamina%C3%A7%C3%A3o%20e%20prazo%3F" target="_blank" rel="noopener">Etiquetas</a>
+            <a class="btn btn-ghost" href="https://wa.me/5534920002591?text=Ol%C3%A1!%20Quero%20or%C3%A7amento%20de%20Sacolas%20(500%20un),%2040x30cm,%204x0.%20Pode%20me%20passar%20op%C3%A7%C3%B5es%20de%20papel/lamina%C3%A7%C3%A3o%20e%20prazo%3F" target="_blank" rel="noopener">Sacolas</a>
+            <a class="btn btn-ghost" href="https://wa.me/5534920002591?text=Ol%C3%A1!%20Quero%20or%C3%A7amento%20de%20Comandas%20personalizadas%20(1000%20un),%20A5,%204x4.%20Pode%20me%20passar%20op%C3%A7%C3%B5es%20de%20papel/lamina%C3%A7%C3%A3o%20e%20prazo%3F" target="_blank" rel="noopener">Comandas</a>
+              </div> 
+        </div>
         <aside class="side reveal delay-1">
           <div class="kv">
             <div class="icon">📍</div>
@@ -959,7 +1061,59 @@ img, svg, video, canvas {
             <a href="#localizacao">Ver mapa</a>
             <a href="#contato">Contato</a>
           </div>
+
+          <div class="mini-map">
+            <iframe
+              title="Mapa rápido - GRÁFICA SAGA"
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              src="https://www.google.com/maps?q=Av.%20Afonso%20Pena%2C%203268%20Uberl%C3%A2ndia%20MG%2038400-710&output=embed"
+              style="width:100%; height:180px; border:0;"></iframe>
+          </div>
         </aside>
+      </div>
+    </section>
+
+    <!-- SOBRE NÓS -->
+    <section id="sobre">
+      <div class="section-title reveal">
+        <h2>Sobre a Gráfica Saga</h2>
+        <p>Impressão com padrão corporativo e atendimento local.</p>
+      </div>
+      <div class="grid">
+        <div class="card reveal" style="grid-column: span 12;">
+          <p class="muted" style="margin:0;">
+            Somos uma gráfica em Uberlândia focada em qualidade, prazo e acabamento premium. Atendemos empresas e projetos que exigem
+            consistência visual e entrega confiável. <!-- AJUSTAR TEXTO SE NECESSÁRIO -->
+          </p>
+        </div>
+        <div class="card reveal" style="grid-column: span 4;">
+          <strong>Desde 2014</strong><br />
+          <span class="muted">Experiência no mercado gráfico. <!-- AJUSTAR ANO --></span>
+        </div>
+        <div class="card reveal delay-1" style="grid-column: span 4;">
+          <strong>+5.000 pedidos</strong><br />
+          <span class="muted">Entregas para empresas locais. <!-- AJUSTAR NÚMERO --></span>
+        </div>
+        <div class="card reveal delay-2" style="grid-column: span 4;">
+          <strong>Atendimento local</strong><br />
+          <span class="muted">Proximidade e suporte rápido.</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ATENDIMENTO LOCAL -->
+    <section id="atendimento-local">
+      <div class="section-title reveal">
+        <h2>Atendemos Uberlândia e região</h2>
+        <p>Atendimento local com agilidade e suporte próximo.</p>
+      </div>
+      <div class="grid">
+        <div class="card reveal" style="grid-column: span 12;">
+          <p class="muted" style="margin:0;">
+            Recebemos pedidos de Uberlândia e cidades próximas, com orientação completa para impressão e acabamento.
+          </p>
+        </div>
       </div>
     </section>
 
@@ -971,31 +1125,40 @@ img, svg, video, canvas {
       </div>
 
       <div class="grid">
-        <a class="card item reveal product-link" href="#" data-product="Comandas personalizadas" data-qty="1.000" data-size="A5" data-print="4x4">
+        <a class="card item reveal product-link" href="#" data-product="Comandas personalizadas" data-qty="1.000" data-size="A5" data-print="4x4"
+           data-message="Olá! Quero orçamento de Comandas personalizadas (1000 un), tamanho A5, impressão 4x4. Pode me passar opções de papel/laminação e prazo?">
           <span class="pill">Bares e Restaurantes</span><h3>Comandas personalizadas</h3><p>Comandas com impressão nítida e acabamento resistente.</p>
         </a>
-        <a class="card item reveal delay-1 product-link" href="#" data-product="Livros personalizados" data-qty="250" data-size="A4" data-print="4x4">
+        <a class="card item reveal delay-1 product-link" href="#" data-product="Livros personalizados" data-qty="250" data-size="A4" data-print="4x4"
+           data-message="Olá! Quero orçamento de Livros personalizados (250 un), tamanho A4, impressão 4x4. Pode me passar opções de papel/laminação e prazo?">
           <span class="pill">Divulgação</span><h3>Livros personalizados</h3><p>Projetos especiais com capa e miolo sob medida.</p>
         </a>
-        <a class="card item reveal delay-2 product-link" href="#" data-product="Sacolas personalizadas" data-qty="500" data-size="40x30" data-print="4x0">
+        <a class="card item reveal delay-2 product-link" href="#" data-product="Sacolas personalizadas" data-qty="500" data-size="40x30" data-print="4x0"
+           data-message="Olá! Quero orçamento de Sacolas personalizadas (500 un), tamanho 40x30, impressão 4x0. Pode me passar opções de papel/laminação e prazo?">
           <span class="pill">Divulgação</span><h3>Sacolas personalizadas</h3><p>Sacolas com identidade visual para sua marca.</p>
         </a>
-        <a class="card item reveal product-link" href="#" data-product="Calendários" data-qty="200" data-size="A3" data-print="4x4">
+        <a class="card item reveal product-link" href="#" data-product="Calendários" data-qty="200" data-size="A3" data-print="4x4"
+           data-message="Olá! Quero orçamento de Calendários (200 un), tamanho A3, impressão 4x4. Pode me passar opções de papel/laminação e prazo?">
           <span class="pill">Escritório</span><h3>Calendários</h3><p>Modelos de mesa ou parede para clientes e equipe.</p>
         </a>
-        <a class="card item reveal delay-1 product-link" href="#" data-product="Agendas personalizadas" data-qty="200" data-size="A5" data-print="4x4">
+        <a class="card item reveal delay-1 product-link" href="#" data-product="Agendas personalizadas" data-qty="200" data-size="A5" data-print="4x4"
+           data-message="Olá! Quero orçamento de Agendas personalizadas (200 un), tamanho A5, impressão 4x4. Pode me passar opções de papel/laminação e prazo?">
           <span class="pill">Escritório</span><h3>Agendas personalizadas</h3><p>Agendas com capa customizada para empresas e eventos.</p>
         </a>
-        <a class="card item reveal delay-2 product-link" href="#" data-product="Cartaz de oferta" data-qty="200" data-size="A3" data-print="4x0">
+        <a class="card item reveal delay-2 product-link" href="#" data-product="Cartaz de oferta" data-qty="200" data-size="A3" data-print="4x0"
+           data-message="Olá! Quero orçamento de Cartaz de oferta (200 un), tamanho A3, impressão 4x0. Pode me passar opções de papel/laminação e prazo?">
           <span class="pill">Cartazes</span><h3>Cartaz de oferta</h3><p>Cartazes de precificação com alta legibilidade.</p>
         </a>
-        <a class="card item reveal product-link" href="#" data-product="Etiquetas adesivas" data-qty="1.000" data-size="5x5" data-print="4x0">
+        <a class="card item reveal product-link" href="#" data-product="Etiquetas adesivas" data-qty="1.000" data-size="5x5" data-print="4x0"
+           data-message="Olá! Quero orçamento de Etiquetas adesivas (1000 un), tamanho 5x5, impressão 4x0. Pode me passar opções de papel/laminação e prazo?">
           <span class="pill">Impressão Digital</span><h3>Etiquetas adesivas</h3><p>Etiquetas para produtos, embalagens e logística.</p>
         </a>
-        <a class="card item reveal delay-1 product-link" href="#" data-product="Adesivos personalizados" data-qty="1.000" data-size="10x10" data-print="4x0">
+        <a class="card item reveal delay-1 product-link" href="#" data-product="Adesivos personalizados" data-qty="1.000" data-size="10x10" data-print="4x0"
+           data-message="Olá! Quero orçamento de Adesivos personalizados (1000 un), tamanho 10x10, impressão 4x0. Pode me passar opções de papel/laminação e prazo?">
           <span class="pill">Impressão Digital</span><h3>Adesivos personalizados</h3><p>Recorte e acabamento profissional para sua marca.</p>
         </a>
-        <a class="card item reveal delay-2 product-link" href="#" data-product="Folders" data-qty="1.000" data-size="A4" data-print="4x4">
+        <a class="card item reveal delay-2 product-link" href="#" data-product="Folders" data-qty="1.000" data-size="A4" data-print="4x4"
+           data-message="Olá! Quero orçamento de Folders (1000 un), tamanho A4, impressão 4x4. Pode me passar opções de papel/laminação e prazo?">
           <span class="pill">Divulgação</span><h3>Folders</h3><p>Apresente seus serviços e produtos com impacto.</p>
         </a>
       </div>
@@ -1054,7 +1217,7 @@ img, svg, video, canvas {
               <textarea class="textarea" id="bObs" name="obs" placeholder="Detalhes adicionais (opcional)"></textarea>
             </div>
             <div class="form-field full">
-              <button class="btn btn-primary" type="button" id="sendBudget">Enviar orçamento pelo WhatsApp</button>
+              <button class="btn btn-primary" type="button" id="sendBudget">Gerar mensagem e abrir WhatsApp</button>
             </div>
           </form>
         </div>
@@ -1081,7 +1244,7 @@ img, svg, video, canvas {
     <section id="mostruario" class="showcase">
       <div class="section-title reveal">
         <h2>Mostruário</h2>
-    
+        <p>Alguns exemplos reais de produtos (detalhes em azul).</p>
       </div>
 
       <div class="grid">
@@ -1177,7 +1340,7 @@ img, svg, video, canvas {
       </div>
 
       <div class="reveal" style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
-        <a class="btn btn-primary" href="https://wa.me/5534920002591" target="_blank" rel="noopener">📲 Falar no WhatsApp</a>
+        <a class="btn btn-primary" href="https://wa.me/5534920002591" target="_blank" rel="noopener">Iniciar orçamento no WhatsApp</a>
       </div>
     </section>
 
@@ -1188,11 +1351,17 @@ img, svg, video, canvas {
         <p>Alguns comentários do Google.</p>
       </div>
 
+      <div class="trust-badges reveal">
+        <span class="badge">⭐ 4,8 no Google</span>
+        <span class="badge">✅ Entrega no prazo</span>
+        <span class="badge">⏱️ Resposta rápida</span>
+      </div>
+
       <div class="rating-summary reveal">
         <div class="rating-score">
-          <strong>4,8</strong>
+          <strong><span data-count="4.8" data-decimals="1">4,8</span></strong>
           <div class="rating-stars" aria-label="4,8 de 5 estrelas">★★★★★</div>
-          <span>104 avaliações</span>
+          <span><span data-count="104">104</span> avaliações</span>
         </div>
         <div class="rating-bars" aria-hidden="true">
           <div class="rating-row"><span class="label">5</span><span class="bar" data-fill="5"><i></i></span></div>
@@ -1201,6 +1370,9 @@ img, svg, video, canvas {
           <div class="rating-row"><span class="label">2</span><span class="bar" data-fill="2"><i></i></span></div>
           <div class="rating-row"><span class="label">1</span><span class="bar" data-fill="1"><i></i></span></div>
         </div>
+      </div>
+      <div class="reveal" style="margin-top:10px; display:flex; gap:10px; flex-wrap:wrap;">
+        <a class="btn btn-ghost" href="https://www.google.com/maps/search/?api=1&query=Gr%C3%A1fica%20Saga%20Uberl%C3%A2ndia" target="_blank" rel="noopener">Ver avaliações no Google</a>
       </div>
 
       <div class="grid">
@@ -1248,6 +1420,19 @@ img, svg, video, canvas {
       </div>
     </section>
 
+    <!-- TRABALHOS RECENTES -->
+    <section id="trabalhos">
+      <div class="section-title reveal">
+        <h2>Trabalhos recentes</h2>
+        <p>Exemplos de produção recorrente.</p>
+      </div>
+      <div class="grid">
+        <div class="card item reveal"><span class="pill">Cartões</span><h3>Cartões de visita</h3><p>Impressão consistente e acabamento preciso.</p></div>
+        <div class="card item reveal delay-1"><span class="pill">Sacolas</span><h3>Sacolas personalizadas</h3><p>Materiais reforçados com ótima apresentação.</p></div>
+        <div class="card item reveal delay-2"><span class="pill">Etiquetas</span><h3>Etiquetas adesivas</h3><p>Cores vivas e corte preciso para produtos.</p></div>
+      </div>
+    </section>
+
     <!-- NOSSO PROCESSO -->
     <section id="processo" class="process">
       <div class="section-title reveal">
@@ -1273,8 +1458,8 @@ img, svg, video, canvas {
     <!-- ENVIO DE ARQUIVOS -->
     <section id="arquivos" class="files">
       <div class="section-title reveal">
-        <h2>Envio de arquivos</h2>
-        <p>Para garantir impressão perfeita.</p>
+        <h2>Checklist para impressão perfeita</h2>
+        <p>Requisitos técnicos recomendados para evitar retrabalho.</p>
       </div>
       <div class="grid">
         <div class="card reveal" style="grid-column: span 12;">
@@ -1368,15 +1553,50 @@ img, svg, video, canvas {
           <p class="muted" style="margin:0 0 12px;">Envie os detalhes do seu pedido e retornamos com valores e prazos.</p>
 
           <div style="display:flex; gap:10px; flex-wrap:wrap;">
-            <a class="btn btn-primary" href="https://wa.me/5534920002591" target="_blank" rel="noopener" aria-label="Chamar no WhatsApp">📲 WhatsApp</a>
-            <a class="btn btn-ghost" href="tel:+553432354163" aria-label="Ligar para (34) 3235-4163">Ligar: (34) 3235-4163</a>
+            <a class="btn btn-primary" href="https://wa.me/5534920002591" target="_blank" rel="noopener" aria-label="Chamar no WhatsApp" data-cta="contato-whatsapp">Iniciar orçamento no WhatsApp</a>
+            <a class="btn btn-ghost" href="tel:+553432354163" aria-label="Ligar para (34) 3235-4163">Falar com atendente</a>
+            <button class="copy-btn" type="button" data-copy="+553432354163">Copiar telefone</button>
             <a class="btn btn-ghost" href="mailto:comercial@graficagaia.com.br" aria-label="Enviar e-mail para comercial@graficagaia.com.br">✉️ E-mail</a>
+            <button class="copy-btn" type="button" data-copy="comercial@graficagaia.com.br">Copiar e-mail</button>
           </div>
 
           <div class="badges">
             <a class="badge" href="https://www.instagram.com/grafica_saga/" target="_blank" rel="noopener">📸 @grafica_saga</a>
             <a class="badge" href="#localizacao">📍 Ver localização</a>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- POLÍTICA DE PRIVACIDADE -->
+    <section id="privacidade">
+      <div class="section-title reveal">
+        <h2>Política de Privacidade</h2>
+        <p>Transparência no uso das informações.</p>
+      </div>
+      <div class="grid">
+        <div class="card reveal" style="grid-column: span 12;">
+          <p class="muted" style="margin:0;">
+            Coletamos apenas dados necessários para atendimento e orçamento (nome, contato e detalhes do pedido). Não compartilhamos
+            informações com terceiros sem consentimento. Para dúvidas ou solicitações, fale pelo e-mail
+            <strong>comercial@graficagaia.com.br</strong>. <!-- AJUSTAR TEXTO CONFORME POLÍTICA OFICIAL -->
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- TERMOS -->
+    <section id="termos">
+      <div class="section-title reveal">
+        <h2>Termos</h2>
+        <p>Condições gerais de atendimento.</p>
+      </div>
+      <div class="grid">
+        <div class="card reveal" style="grid-column: span 12;">
+          <p class="muted" style="margin:0;">
+            Os prazos e valores variam conforme produto, quantidade e acabamento. Confirmações são feitas antes da produção.
+            <!-- AJUSTAR TEXTO CONFORME CONDIÇÕES OFICIAIS -->
+          </p>
         </div>
       </div>
     </section>
@@ -1416,8 +1636,8 @@ img, svg, video, canvas {
   <footer class="footer">
     <div class="mobile-cta">
       <div class="wrap inner">
-        <a class="btn btn-primary" href="https://wa.me/5534920002591" target="_blank" rel="noopener" aria-label="Chamar no WhatsApp">📲 WhatsApp</a>
-        <a class="btn btn-ghost" href="tel:+553432354163" aria-label="Ligar para (34) 3235-4163">📞 Ligar</a>
+        <a class="btn btn-primary" href="https://wa.me/5534920002591" target="_blank" rel="noopener" aria-label="Chamar no WhatsApp" data-cta="mobile-whatsapp">Iniciar orçamento no WhatsApp</a>
+        <a class="btn btn-ghost" href="tel:+553432354163" aria-label="Ligar para (34) 3235-4163">Falar com atendente</a>
       </div>
     </div>
     <div class="wrap">
@@ -1427,22 +1647,31 @@ img, svg, video, canvas {
           <span class="muted" style="font-size:13px;">Clique e peça seu orçamento agora.</span>
         </div>
         <div style="display:flex; gap:10px; flex-wrap:wrap;">
-          <a class="btn btn-primary" href="https://wa.me/5534920002591" target="_blank" rel="noopener">📲 WhatsApp</a>
-          <a class="btn btn-ghost" href="tel:+553432354163">Ligar</a>
+          <a class="btn btn-primary" href="https://wa.me/5534920002591" target="_blank" rel="noopener" data-cta="footer-whatsapp">Iniciar orçamento no WhatsApp</a>
+          <a class="btn btn-ghost" href="tel:+553432354163">Falar com atendente</a>
         </div>
       </div>
 
       <div class="footer-inner">
         <div>
           <strong style="color:#222;">GRÁFICA SAGA</strong><br />
-
+          <span>Av. Afonso Pena, 3268 — Uberlândia - MG, 38400-710</span><br />
+          <span>Pagamento: Pix e cartão</span><br />
+          <span><a href="#arquivos" class="muted">Checklist para impressão perfeita</a></span>
         </div>
         <div>
+          <span><a href="#privacidade" class="muted">Política de Privacidade</a> • <a href="#termos" class="muted">Termos</a></span><br />
           <span>© <span id="ano"></span> — Todos os direitos reservados</span>
         </div>
       </div>
     </div>
   </footer>
+
+  <!-- Botão flutuante WhatsApp (desktop) -->
+  <a class="float-wa" href="https://wa.me/5534920002591" target="_blank" rel="noopener" aria-label="Orçar no WhatsApp" data-cta="float-whatsapp">
+    📲
+    <span class="tip">Orçar no WhatsApp</span>
+  </a>
 
   <script>
     // Ano
@@ -1506,7 +1735,7 @@ img, svg, video, canvas {
       const closeMinutes = todayHours[1] * 60;
 
       if (nowMinutes >= openMinutes && nowMinutes < closeMinutes) {
-        statusEl.textContent = `Aberto agora • Abre às ${fmt(todayHours[0])} e Fecha às ${fmt(todayHours[1])}`;
+        statusEl.textContent = `Aberto agora • Abriu às ${fmt(todayHours[0])} • Fecha às ${fmt(todayHours[1])}`;
         return;
       }
 
@@ -1672,15 +1901,265 @@ img, svg, video, canvas {
     (function(){
       const items = document.querySelectorAll(".product-link");
       items.forEach((el) => {
+        // Se existir data-message, ela tem prioridade (personalize por produto).
+        const custom = el.dataset.message;
         const product = el.dataset.product || "Produto";
         const qty = el.dataset.qty || "1.000";
         const size = el.dataset.size || "9x5 cm";
         const print = el.dataset.print || "4x4";
-        const msg = `Olá! Quero orçamento para ${qty} ${product}, tamanho ${size}, impressão ${print}.`;
+        const msg = custom || `Olá! Quero orçamento de ${product} (${qty} un), tamanho ${size}, impressão ${print}. Pode me passar opções de papel/laminação e prazo?`;
         el.href = `https://wa.me/5534920002591?text=${encodeURIComponent(msg)}`;
         el.target = "_blank";
         el.rel = "noopener";
       });
+    })();
+
+    // Contadores animados nas avaliações
+    (function(){
+      const section = document.getElementById("avaliacoes");
+      if (!section) return;
+      const counters = section.querySelectorAll("[data-count]");
+      if (counters.length === 0) return;
+      const prefers = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const animate = () => {
+        counters.forEach((el) => {
+          const target = Number(el.dataset.count);
+          const decimals = Number(el.dataset.decimals || 0);
+          if (Number.isNaN(target)) return;
+          if (prefers) {
+            el.textContent = target.toFixed(decimals).replace(".", ",");
+            return;
+          }
+          const start = performance.now();
+          const duration = 900;
+          const step = (t) => {
+            const p = Math.min(1, (t - start) / duration);
+            const val = target * p;
+            el.textContent = val.toFixed(decimals).replace(".", ",");
+            if (p < 1) requestAnimationFrame(step);
+          };
+          requestAnimationFrame(step);
+        });
+      };
+
+      if ("IntersectionObserver" in window) {
+        const io = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              animate();
+              io.disconnect();
+            }
+          });
+        }, { threshold: 0.2 });
+        io.observe(section);
+      } else {
+        animate();
+      }
+    })();
+
+    // FAQ acessível com aria-expanded
+    (function(){
+      const items = document.querySelectorAll(".faq details");
+      if (items.length === 0) return;
+      items.forEach((d) => {
+        const summary = d.querySelector("summary");
+        if (!summary) return;
+        summary.setAttribute("role", "button");
+        summary.setAttribute("aria-expanded", d.open ? "true" : "false");
+        d.addEventListener("toggle", () => {
+          summary.setAttribute("aria-expanded", d.open ? "true" : "false");
+        }, { passive:true });
+      });
+    })();
+
+    // Texto rotativo no hero
+    (function(){
+      const wrap = document.querySelector(".hero-rotator");
+      if (!wrap) return;
+      const prefers = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const phrases = [
+        "Impressão profissional para empresas de Uberlândia",
+        "Qualidade, prazo e acabamento premium",
+        "Orçamento rápido e atendimento de confiança",
+        "Cartões, folders, adesivos e personalizados"
+      ];
+      if (prefers) {
+        wrap.textContent = phrases[0];
+        return;
+      }
+      let i = 0;
+      const span = wrap.querySelector("span") || document.createElement("span");
+      wrap.innerHTML = "";
+      wrap.appendChild(span);
+      const swap = () => {
+        span.classList.remove("is-active");
+        setTimeout(() => {
+          span.textContent = phrases[i % phrases.length];
+          span.classList.add("is-active");
+          i += 1;
+        }, 120);
+      };
+      swap();
+      setInterval(swap, 3000);
+    })();
+
+    // Contadores elegantes no hero
+    (function(){
+      const hero = document.querySelector(".hero");
+      if (!hero) return;
+      const counters = hero.querySelectorAll("[data-count]");
+      if (counters.length === 0) return;
+      const prefers = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      let played = false;
+
+      const animate = () => {
+        if (played) return;
+        played = true;
+        counters.forEach((el) => {
+          const target = Number(el.dataset.count);
+          const decimals = Number(el.dataset.decimals || 0);
+          if (Number.isNaN(target)) return;
+          if (prefers) {
+            el.textContent = target.toFixed(decimals).replace(".", ",");
+            return;
+          }
+          const start = performance.now();
+          const duration = 900;
+          const step = (t) => {
+            const p = Math.min(1, (t - start) / duration);
+            const val = target * p;
+            el.textContent = val.toFixed(decimals).replace(".", ",");
+            if (p < 1) requestAnimationFrame(step);
+          };
+          requestAnimationFrame(step);
+        });
+      };
+
+      if ("IntersectionObserver" in window) {
+        const io = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              animate();
+              io.disconnect();
+            }
+          });
+        }, { threshold: 0.2 });
+        io.observe(hero);
+      } else {
+        animate();
+      }
+    })();
+
+    // Tilt sutil nos cards (desktop)
+    (function(){
+      const prefers = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const canHover = window.matchMedia && window.matchMedia("(hover: hover)").matches;
+      if (prefers || !canHover) return;
+      const cards = document.querySelectorAll(".card");
+      cards.forEach((card) => {
+        card.classList.add("tilt");
+        card.addEventListener("mousemove", (e) => {
+          const rect = card.getBoundingClientRect();
+          const x = (e.clientX - rect.left) / rect.width - 0.5;
+          const y = (e.clientY - rect.top) / rect.height - 0.5;
+          const rx = (y * -2).toFixed(2);
+          const ry = (x * 2).toFixed(2);
+          card.style.transform = `perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg)`;
+        }, { passive:true });
+        card.addEventListener("mouseleave", () => {
+          card.style.transform = "";
+        });
+      });
+    })();
+
+    // Ripple discreto nos botões
+    (function(){
+      const buttons = document.querySelectorAll(".btn");
+      buttons.forEach((btn) => {
+        btn.addEventListener("click", (e) => {
+          const rect = btn.getBoundingClientRect();
+          const ripple = document.createElement("span");
+          ripple.className = "ripple";
+          ripple.style.left = `${e.clientX - rect.left}px`;
+          ripple.style.top = `${e.clientY - rect.top}px`;
+          btn.appendChild(ripple);
+          setTimeout(() => ripple.remove(), 650);
+        });
+      });
+    })();
+
+    // Copiar telefone/e-mail com feedback
+    (function(){
+      const copyBtns = document.querySelectorAll("[data-copy]");
+      if (!navigator.clipboard || copyBtns.length === 0) return;
+      copyBtns.forEach((btn) => {
+        btn.addEventListener("click", async () => {
+          const value = btn.getAttribute("data-copy");
+          try{
+            await navigator.clipboard.writeText(value);
+            btn.classList.add("is-copied");
+            const prev = btn.textContent;
+            btn.textContent = "Copiado ✓";
+            setTimeout(() => {
+              btn.classList.remove("is-copied");
+              btn.textContent = prev;
+            }, 1200);
+          }catch(e){}
+        }, { passive:true });
+      });
+    })();
+
+    // Link ativo na navegação conforme seção visível
+    (function(){
+      const links = document.querySelectorAll("nav a[href^=\"#\"]");
+      const sections = Array.from(links).map(a => document.querySelector(a.getAttribute("href"))).filter(Boolean);
+      if (links.length === 0 || sections.length === 0) return;
+      const activate = (id) => {
+        links.forEach(a => a.classList.toggle("active", a.getAttribute("href") === `#${id}`));
+      };
+      if ("IntersectionObserver" in window) {
+        const io = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) activate(entry.target.id);
+          });
+        }, { rootMargin: "-40% 0px -55% 0px", threshold: 0.1 });
+        sections.forEach(sec => io.observe(sec));
+      }
+    })();
+
+    // CTA do rodapé flutuante (fixo até chegar no rodapé)
+    (function(){
+      const footer = document.querySelector(".footer");
+      const cta = document.querySelector(".footer-cta");
+      if (!footer || !cta) return;
+      const placeholder = document.createElement("div");
+      placeholder.style.height = `${cta.offsetHeight}px`;
+      placeholder.style.display = "none";
+      cta.parentNode.insertBefore(placeholder, cta);
+
+      const update = () => {
+        if (window.innerWidth <= 768) {
+          cta.classList.remove("is-floating");
+          placeholder.style.display = "none";
+          return;
+        }
+        const footerTop = footer.getBoundingClientRect().top;
+        const threshold = window.innerHeight - (cta.offsetHeight + 16);
+        if (footerTop > threshold) {
+          cta.classList.add("is-floating");
+          placeholder.style.display = "block";
+        } else {
+          cta.classList.remove("is-floating");
+          placeholder.style.display = "none";
+        }
+      };
+
+      window.addEventListener("scroll", update, { passive:true });
+      window.addEventListener("resize", () => {
+        placeholder.style.height = `${cta.offsetHeight}px`;
+        update();
+      }, { passive:true });
+      update();
     })();
   </script>
 </body>
