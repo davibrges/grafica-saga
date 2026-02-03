@@ -4,8 +4,71 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <meta name="theme-color" content="#FF7A00" />
-  <title>GRÁFICA SAGA </title>
-  <meta name="description" content="GRÁFICA SAGA — Gráfica em Uberlândia (MG)." />
+  <!-- Performance hints -->
+  <link rel="preconnect" href="https://www.google.com" />
+  <link rel="dns-prefetch" href="https://www.google.com" />
+  <link rel="preconnect" href="https://www.gstatic.com" crossorigin />
+  <link rel="dns-prefetch" href="https://www.gstatic.com" />
+  <link rel="preload" as="image" href="assets/logo.png" />
+  <title>GRÁFICA SAGA — Gráfica em Uberlândia – MG | Impressão premium</title>
+  <meta name="description" content="Gráfica em Uberlândia – MG com impressão profissional, acabamento premium e atendimento rápido. Peça orçamento pelo WhatsApp agora." />
+  <!-- SEO: troque pela URL oficial quando publicar -->
+  <link rel="canonical" href="https://SEU-DOMINIO-AQUI/" />
+
+  <!-- Favicon (substitua pelos arquivos reais) -->
+  <!-- <link rel="icon" href="/favicon.ico" sizes="any" /> -->
+  <!-- <link rel="icon" href="/favicon.svg" type="image/svg+xml" /> -->
+  <!-- <link rel="apple-touch-icon" href="/apple-touch-icon.png" /> -->
+  <!-- Manifest PWA -->
+  <link rel="manifest" href="/site.webmanifest" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="GRÁFICA SAGA — Gráfica em Uberlândia – MG | Impressão premium" />
+  <meta property="og:description" content="Impressão profissional, acabamento premium e atendimento rápido. Peça orçamento pelo WhatsApp." />
+  <!-- TODO: criar a imagem em assets/og-saga.jpg -->
+  <meta property="og:image" content="assets/og-saga.jpg" />
+  <meta property="og:url" content="https://SEU-DOMINIO-AQUI/" />
+  <meta property="og:locale" content="pt_BR" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="GRÁFICA SAGA — Gráfica em Uberlândia – MG | Impressão premium" />
+  <meta name="twitter:description" content="Impressão profissional, acabamento premium e atendimento rápido. Peça orçamento pelo WhatsApp." />
+  <!-- TODO: criar a imagem em assets/og-saga.jpg -->
+  <meta name="twitter:image" content="assets/og-saga.jpg" />
+
+  <!-- JSON-LD LocalBusiness -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "name": "GRÁFICA SAGA",
+      "image": "https://SEU-DOMINIO-AQUI/assets/og-saga.jpg",
+      "url": "https://SEU-DOMINIO-AQUI/",
+      "telephone": "+553432354163",
+      "priceRange": "$$",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Av. Afonso Pena, 3268",
+        "addressLocality": "Uberlândia",
+        "addressRegion": "MG",
+        "postalCode": "38400-710",
+        "addressCountry": "BR"
+      },
+      "sameAs": ["https://www.instagram.com/grafica_saga/"],
+      "openingHours": [
+        "Mo-Fr 08:00-18:00",
+        "Sa 08:00-12:00"
+      ],
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.8",
+        "reviewCount": "104"
+      }
+      /* "geo": { "@type": "GeoCoordinates", "latitude": -18.91, "longitude": -48.27 } */
+    }
+  </script>
 
   <style>
     :root{
@@ -36,6 +99,7 @@
 
     *{box-sizing:border-box}
     html,body{height:100%}
+    html{scroll-padding-top:88px;}
     body{
       margin:0;
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
@@ -93,6 +157,12 @@
       border-bottom: 1px solid rgba(0,0,0,.05);
       box-shadow: none;
       transition: padding 240ms var(--ease), background 240ms var(--ease), box-shadow 240ms var(--ease);
+    }
+    /* Fallback para browsers sem backdrop-filter */
+    @supports not ((backdrop-filter: blur(10px)) or (-webkit-backdrop-filter: blur(10px))){
+      .topbar{
+        background: rgba(255,255,255,.85);
+      }
     }
     .topbar.is-scrolled{
       background: transparent;
@@ -368,6 +438,7 @@
 
     /* PRODUCTS */
     .products .item{grid-column: span 4; min-height:140px; display:flex; flex-direction:column; gap:10px;}
+    .products .item{color:inherit; text-decoration:none;}
     .products .item.spotlight{
       transform: scale(1.02);
       box-shadow: 0 26px 60px rgba(0,0,0,.16);
@@ -561,6 +632,115 @@
     @media (max-width: 980px){ .reviews .quote{grid-column: span 6;} }
     @media (max-width: 560px){ .reviews .quote{grid-column: span 12;} }
 
+    /* Renderização progressiva em seções longas */
+    #avaliacoes,
+    #faq,
+    #arquivos,
+    #horarios,
+    #contato,
+    .partners{
+      content-visibility: auto;
+      contain-intrinsic-size: 800px;
+    }
+
+    /* Reduz custo de sombras/blur em mobile */
+    @media (max-width: 768px){
+      .card, .stat, .footer-cta, .partner, .step, .topbar{
+        box-shadow: 0 8px 18px rgba(0,0,0,.06);
+      }
+      .reveal{filter:none;}
+      .topbar{backdrop-filter: blur(6px);}
+    }
+
+    /* ====== COMO PEDIR ORÇAMENTO ====== */
+    .budget-grid{display:grid; grid-template-columns: repeat(12, 1fr); gap:18px;}
+    .budget-card{grid-column: span 12;}
+    .form-grid{display:grid; grid-template-columns: repeat(12, 1fr); gap:12px;}
+    .form-field{grid-column: span 6; display:flex; flex-direction:column; gap:6px;}
+    .form-field.full{grid-column: span 12;}
+    .form-field label{font-size:12px; color:var(--muted); font-weight:700;}
+    .input, .select, .textarea{
+      border:1px solid rgba(0,0,0,.10);
+      border-radius:14px;
+      padding:10px 12px;
+      font-size:14px;
+      background:#fff;
+      color:#111;
+      outline:none;
+      transition: border-color 200ms var(--ease), box-shadow 200ms var(--ease);
+    }
+    .input:focus, .select:focus, .textarea:focus{
+      border-color: rgba(255,122,0,.45);
+      box-shadow: 0 0 0 3px rgba(255,122,0,.10);
+    }
+    .textarea{min-height:90px; resize:vertical;}
+    @media (max-width: 980px){ .form-field{grid-column: span 12;} }
+
+    /* ====== DIFERENCIAIS ====== */
+    .diff .item{grid-column: span 4;}
+    @media (max-width: 980px){ .diff .item{grid-column: span 6;} }
+    @media (max-width: 560px){ .diff .item{grid-column: span 12;} }
+
+    /* ====== NOSSO PROCESSO ====== */
+    .process-steps{display:grid; grid-template-columns: repeat(3, 1fr); gap:18px;}
+    .step{
+      position:relative;
+      padding:18px;
+      border-radius: var(--radius-2);
+      border:1px solid rgba(0,0,0,.06);
+      background:#fff;
+      box-shadow: var(--shadow-soft);
+    }
+    .step:before{
+      content: attr(data-step);
+      position:absolute;
+      top:-12px; left:16px;
+      background: rgba(255,122,0,.12);
+      border:1px solid rgba(255,122,0,.25);
+      color:#7a2f00;
+      font-weight:900;
+      font-size:12px;
+      padding:4px 8px;
+      border-radius:999px;
+    }
+    @media (max-width: 980px){ .process-steps{grid-template-columns:1fr;} }
+
+    /* ====== FAQ ====== */
+    .faq details{
+      border:1px solid rgba(0,0,0,.06);
+      border-radius:18px;
+      background:#fff;
+      padding:14px 16px;
+      box-shadow: var(--shadow-soft);
+    }
+    .faq details + details{margin-top:10px;}
+    .faq summary{
+      cursor:pointer;
+      font-weight:800;
+      list-style:none;
+    }
+    .faq summary::-webkit-details-marker{display:none;}
+    .faq .answer{margin-top:8px; color:var(--muted); font-size:14px;}
+
+    /* ====== ENVIO DE ARQUIVOS ====== */
+    .files .tips{display:grid; gap:8px; font-size:14px; color:var(--muted);}
+
+    /* ====== CTA FIXO MOBILE ====== */
+    .mobile-cta{
+      position:fixed; bottom:0; left:0; right:0;
+      display:none;
+      padding:10px 14px;
+      background: rgba(255,255,255,.96);
+      border-top:1px solid rgba(0,0,0,.08);
+      box-shadow: 0 -10px 24px rgba(0,0,0,.08);
+      z-index:60;
+    }
+    .mobile-cta .inner{display:flex; gap:10px;}
+    @media (max-width: 768px){
+      .mobile-cta{display:block;}
+      body{padding-bottom:68px;}
+    }
+
     /* MAP + HOURS */
     .two-col{display:grid; grid-template-columns:1fr 1fr; gap:18px; align-items:stretch;}
     @media (max-width: 980px){ .two-col{grid-template-columns:1fr;} }
@@ -708,7 +888,7 @@ img, svg, video, canvas {
         </div>
       </a>
 
-      <nav aria-label="Navegação" class="reveal is-visible">
+      <nav aria-label="Navegação principal" class="reveal is-visible">
         <a href="#produtos">Produtos</a>
         <a href="#mostruario">Mostruário</a>
         <a href="#avaliacoes">Avaliações</a>
@@ -717,7 +897,7 @@ img, svg, video, canvas {
         <a href="#contato">Contato</a>
       </nav>
 
-      <a class="btn btn-primary reveal is-visible" href="#contato">Fazer orçamento</a>
+      <a class="btn btn-primary reveal is-visible" href="#contato" aria-label="Ir para contato e fazer orçamento">Fazer orçamento</a>
     </div>
   </header>
 
@@ -791,15 +971,109 @@ img, svg, video, canvas {
       </div>
 
       <div class="grid">
-        <article class="card item reveal"><span class="pill">Bares e Restaurantes</span><h3>Comandas personalizadas</h3><p>Comandas com impressão nítida e acabamento resistente.</p></article>
-        <article class="card item reveal delay-1"><span class="pill">Divulgação</span><h3>Livros personalizados</h3><p>Projetos especiais com capa e miolo sob medida.</p></article>
-        <article class="card item reveal delay-2"><span class="pill">Divulgação</span><h3>Sacolas personalizadas</h3><p>Sacolas com identidade visual para sua marca.</p></article>
-        <article class="card item reveal"><span class="pill">Escritório</span><h3>Calendários</h3><p>Modelos de mesa ou parede para clientes e equipe.</p></article>
-        <article class="card item reveal delay-1"><span class="pill">Escritório</span><h3>Agendas personalizadas</h3><p>Agendas com capa customizada para empresas e eventos.</p></article>
-        <article class="card item reveal delay-2"><span class="pill">Cartazes</span><h3>Cartaz de oferta</h3><p>Cartazes de precificação com alta legibilidade.</p></article>
-        <article class="card item reveal"><span class="pill">Impressão Digital</span><h3>Etiquetas adesivas</h3><p>Etiquetas para produtos, embalagens e logística.</p></article>
-        <article class="card item reveal delay-1"><span class="pill">Impressão Digital</span><h3>Adesivos personalizados</h3><p>Recorte e acabamento profissional para sua marca.</p></article>
-        <article class="card item reveal delay-2"><span class="pill">Divulgação</span><h3>Folders</h3><p>Apresente seus serviços e produtos com impacto.</p></article>
+        <a class="card item reveal product-link" href="#" data-product="Comandas personalizadas" data-qty="1.000" data-size="A5" data-print="4x4">
+          <span class="pill">Bares e Restaurantes</span><h3>Comandas personalizadas</h3><p>Comandas com impressão nítida e acabamento resistente.</p>
+        </a>
+        <a class="card item reveal delay-1 product-link" href="#" data-product="Livros personalizados" data-qty="250" data-size="A4" data-print="4x4">
+          <span class="pill">Divulgação</span><h3>Livros personalizados</h3><p>Projetos especiais com capa e miolo sob medida.</p>
+        </a>
+        <a class="card item reveal delay-2 product-link" href="#" data-product="Sacolas personalizadas" data-qty="500" data-size="40x30" data-print="4x0">
+          <span class="pill">Divulgação</span><h3>Sacolas personalizadas</h3><p>Sacolas com identidade visual para sua marca.</p>
+        </a>
+        <a class="card item reveal product-link" href="#" data-product="Calendários" data-qty="200" data-size="A3" data-print="4x4">
+          <span class="pill">Escritório</span><h3>Calendários</h3><p>Modelos de mesa ou parede para clientes e equipe.</p>
+        </a>
+        <a class="card item reveal delay-1 product-link" href="#" data-product="Agendas personalizadas" data-qty="200" data-size="A5" data-print="4x4">
+          <span class="pill">Escritório</span><h3>Agendas personalizadas</h3><p>Agendas com capa customizada para empresas e eventos.</p>
+        </a>
+        <a class="card item reveal delay-2 product-link" href="#" data-product="Cartaz de oferta" data-qty="200" data-size="A3" data-print="4x0">
+          <span class="pill">Cartazes</span><h3>Cartaz de oferta</h3><p>Cartazes de precificação com alta legibilidade.</p>
+        </a>
+        <a class="card item reveal product-link" href="#" data-product="Etiquetas adesivas" data-qty="1.000" data-size="5x5" data-print="4x0">
+          <span class="pill">Impressão Digital</span><h3>Etiquetas adesivas</h3><p>Etiquetas para produtos, embalagens e logística.</p>
+        </a>
+        <a class="card item reveal delay-1 product-link" href="#" data-product="Adesivos personalizados" data-qty="1.000" data-size="10x10" data-print="4x0">
+          <span class="pill">Impressão Digital</span><h3>Adesivos personalizados</h3><p>Recorte e acabamento profissional para sua marca.</p>
+        </a>
+        <a class="card item reveal delay-2 product-link" href="#" data-product="Folders" data-qty="1.000" data-size="A4" data-print="4x4">
+          <span class="pill">Divulgação</span><h3>Folders</h3><p>Apresente seus serviços e produtos com impacto.</p>
+        </a>
+      </div>
+    </section>
+
+    <!-- COMO PEDIR ORÇAMENTO -->
+    <section id="orcamento" class="budget">
+      <div class="section-title reveal">
+        <h2>Como pedir orçamento</h2>
+        <p>Preencha os dados principais e envie direto no WhatsApp.</p>
+      </div>
+
+      <div class="budget-grid">
+        <div class="card budget-card reveal">
+          <form id="budgetForm" class="form-grid">
+            <div class="form-field">
+              <label for="bProduto">Produto</label>
+              <input class="input" id="bProduto" name="produto" placeholder="Ex: Cartão de visita" required />
+            </div>
+            <div class="form-field">
+              <label for="bQuantidade">Quantidade</label>
+              <input class="input" id="bQuantidade" name="quantidade" placeholder="Ex: 1.000" required />
+            </div>
+            <div class="form-field">
+              <label for="bTamanho">Tamanho</label>
+              <input class="input" id="bTamanho" name="tamanho" placeholder="Ex: 9x5 cm" required />
+            </div>
+            <div class="form-field">
+              <label for="bPapel">Tipo de papel / gramatura</label>
+              <input class="input" id="bPapel" name="papel" placeholder="Ex: Couchê 300g" />
+            </div>
+            <div class="form-field">
+              <label for="bImpressao">Impressão</label>
+              <select class="select" id="bImpressao" name="impressao">
+                <option value="4x0">4x0</option>
+                <option value="4x4">4x4</option>
+              </select>
+            </div>
+            <div class="form-field">
+              <label for="bAcabamentos">Acabamentos</label>
+              <input class="input" id="bAcabamentos" name="acabamentos" placeholder="Ex: Laminação fosca, verniz" />
+            </div>
+            <div class="form-field">
+              <label for="bPrazo">Prazo desejado</label>
+              <input class="input" id="bPrazo" name="prazo" placeholder="Ex: 5 dias úteis" />
+            </div>
+            <div class="form-field">
+              <label for="bArte">Já tem arte?</label>
+              <select class="select" id="bArte" name="arte">
+                <option value="Sim">Sim</option>
+                <option value="Não">Não</option>
+              </select>
+            </div>
+            <div class="form-field full">
+              <label for="bObs">Observações</label>
+              <textarea class="textarea" id="bObs" name="obs" placeholder="Detalhes adicionais (opcional)"></textarea>
+            </div>
+            <div class="form-field full">
+              <button class="btn btn-primary" type="button" id="sendBudget">Enviar orçamento pelo WhatsApp</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- DIFERENCIAIS -->
+    <section id="diferenciais" class="diff">
+      <div class="section-title reveal">
+        <h2>Diferenciais</h2>
+        <p>O que garante segurança e qualidade em cada pedido.</p>
+      </div>
+      <div class="grid">
+        <div class="card item reveal"><span class="pill">Operação</span><h3>Entrega no prazo</h3><p>Planejamento e produção com previsibilidade.</p></div>
+        <div class="card item reveal delay-1"><span class="pill">Atendimento</span><h3>Atendimento rápido</h3><p>Resposta ágil para liberar seu pedido.</p></div>
+        <div class="card item reveal delay-2"><span class="pill">Qualidade</span><h3>Impressão profissional</h3><p>Cores vivas e acabamento consistente.</p></div>
+        <div class="card item reveal"><span class="pill">Pagamento</span><h3>Pix e cartão</h3><p>Facilidade para fechar seu orçamento.</p></div>
+        <div class="card item reveal delay-1"><span class="pill">Local</span><h3>Produção local</h3><p>Controle de qualidade e agilidade.</p></div>
+        <div class="card item reveal delay-2"><span class="pill">Acabamento</span><h3>Acabamento premium</h3><p>Detalhes que valorizam sua marca.</p></div>
       </div>
     </section>
 
@@ -974,6 +1248,76 @@ img, svg, video, canvas {
       </div>
     </section>
 
+    <!-- NOSSO PROCESSO -->
+    <section id="processo" class="process">
+      <div class="section-title reveal">
+        <h2>Nosso processo</h2>
+        <p>Simples, claro e sem ruídos.</p>
+      </div>
+      <div class="process-steps">
+        <div class="step reveal" data-step="1">
+          <h3>Envio das informações</h3>
+          <p class="muted">Você envia produto, quantidade, tamanho e prazo.</p>
+        </div>
+        <div class="step reveal delay-1" data-step="2">
+          <h3>Conferência / prova</h3>
+          <p class="muted">Checamos a arte e enviamos aprovação.</p>
+        </div>
+        <div class="step reveal delay-2" data-step="3">
+          <h3>Produção e retirada/entrega</h3>
+          <p class="muted">Produção final com prazo combinado.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ENVIO DE ARQUIVOS -->
+    <section id="arquivos" class="files">
+      <div class="section-title reveal">
+        <h2>Envio de arquivos</h2>
+        <p>Para garantir impressão perfeita.</p>
+      </div>
+      <div class="grid">
+        <div class="card reveal" style="grid-column: span 12;">
+          <h3 style="margin:0 0 10px;">Padrão recomendado</h3>
+          <div class="tips">
+            <span>PDF/X</span>
+            <span>CMYK</span>
+            <span>300dpi</span>
+            <span>Sangria 3mm</span>
+            <span>Fontes convertidas em curvas</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq" class="faq">
+      <div class="section-title reveal">
+        <h2>FAQ</h2>
+        <p>Dúvidas rápidas e objetivas.</p>
+      </div>
+      <details class="reveal">
+        <summary>Qual prazo médio?</summary>
+        <div class="answer">O prazo varia conforme o produto e a quantidade. Informe seu prazo ideal no orçamento.</div>
+      </details>
+      <details class="reveal delay-1">
+        <summary>Fazem a arte?</summary>
+        <div class="answer">Sim, podemos criar ou ajustar a arte de acordo com a sua necessidade.</div>
+      </details>
+      <details class="reveal delay-2">
+        <summary>Qual tiragem mínima?</summary>
+        <div class="answer">Trabalhamos com tiragens pequenas e grandes. Consulte para o seu produto.</div>
+      </details>
+      <details class="reveal">
+        <summary>Formas de pagamento?</summary>
+        <div class="answer">Pix e cartão. Consulte condições para cada pedido.</div>
+      </details>
+      <details class="reveal delay-1">
+        <summary>Entregam em Uberlândia?</summary>
+        <div class="answer">Sim, atendemos Uberlândia e região.</div>
+      </details>
+    </section>
+
     <!-- HORÁRIOS + MAPA -->
     <section id="horarios">
       <div class="section-title reveal">
@@ -998,11 +1342,10 @@ img, svg, video, canvas {
         </div>
 
         <div class="card reveal delay-1" id="localizacao">
-          <iframe
-            title="Mapa - GRÁFICA SAGA"
-            loading="lazy"
-            referrerpolicy="no-referrer-when-downgrade"
-            src="https://www.google.com/maps?q=Av.%20Afonso%20Pena%2C%203268%20Uberl%C3%A2ndia%20MG%2038400-710&output=embed"></iframe>
+          <!-- Mapa só carrega quando o usuário clicar -->
+          <div id="mapPlaceholder" class="map" style="display:grid; place-items:center; height:340px; border-radius:var(--radius-2); background: rgba(0,0,0,.04); border:1px solid rgba(0,0,0,.06);">
+            <button class="btn btn-ghost" id="loadMap" type="button">Carregar mapa</button>
+          </div>
 
           <div style="margin-top:10px; display:flex; gap:10px; flex-wrap:wrap;">
             <a class="btn btn-ghost" target="_blank" rel="noopener"
@@ -1025,9 +1368,9 @@ img, svg, video, canvas {
           <p class="muted" style="margin:0 0 12px;">Envie os detalhes do seu pedido e retornamos com valores e prazos.</p>
 
           <div style="display:flex; gap:10px; flex-wrap:wrap;">
-            <a class="btn btn-primary" href="https://wa.me/5534920002591" target="_blank" rel="noopener">📲 WhatsApp</a>
-            <a class="btn btn-ghost" href="tel:+553432354163">Ligar: (34) 3235-4163</a>
-            <a class="btn btn-ghost" href="mailto:comercial@graficagaia.com.br">✉️ E-mail</a>
+            <a class="btn btn-primary" href="https://wa.me/5534920002591" target="_blank" rel="noopener" aria-label="Chamar no WhatsApp">📲 WhatsApp</a>
+            <a class="btn btn-ghost" href="tel:+553432354163" aria-label="Ligar para (34) 3235-4163">Ligar: (34) 3235-4163</a>
+            <a class="btn btn-ghost" href="mailto:comercial@graficagaia.com.br" aria-label="Enviar e-mail para comercial@graficagaia.com.br">✉️ E-mail</a>
           </div>
 
           <div class="badges">
@@ -1071,6 +1414,12 @@ img, svg, video, canvas {
 </section>
 
   <footer class="footer">
+    <div class="mobile-cta">
+      <div class="wrap inner">
+        <a class="btn btn-primary" href="https://wa.me/5534920002591" target="_blank" rel="noopener" aria-label="Chamar no WhatsApp">📲 WhatsApp</a>
+        <a class="btn btn-ghost" href="tel:+553432354163" aria-label="Ligar para (34) 3235-4163">📞 Ligar</a>
+      </div>
+    </div>
     <div class="wrap">
       <div class="footer-cta reveal">
         <div>
@@ -1089,7 +1438,7 @@ img, svg, video, canvas {
 
         </div>
         <div>
-          <span>© <span id="ano"></span> — Versão Beta</span>
+          <span>© <span id="ano"></span> — Todos os direitos reservados</span>
         </div>
       </div>
     </div>
@@ -1099,15 +1448,28 @@ img, svg, video, canvas {
     // Ano
     document.getElementById("ano").textContent = new Date().getFullYear();
 
-    // Destaque do dia de hoje + status (aberto/fechado)
+    // Destaque do dia + status no fuso de Brasília
     (function(){
-      const now = new Date();
-      const dow = now.getDay(); // 0=dom
+      const tz = "America/Sao_Paulo";
+      const parts = new Intl.DateTimeFormat("en-US", {
+        timeZone: tz,
+        hour12: false,
+        weekday: "short",
+        hour: "2-digit",
+        minute: "2-digit"
+      }).formatToParts(new Date());
+
+      const map = Object.fromEntries(parts.map(p => [p.type, p.value]));
+      const hour = Number(map.hour);
+      const minute = Number(map.minute);
+      const weekdayMap = { Sun:0, Mon:1, Tue:2, Wed:3, Thu:4, Fri:5, Sat:6 };
+      const dow = weekdayMap[map.weekday];
+
       const li = document.querySelector(`#listaHorarios li[data-dow="${dow}"]`);
       if (li) li.classList.add("today");
 
       const schedule = {
-        0: null,         // domingo fechado
+        0: null,
         1: [8, 18],
         2: [8, 18],
         3: [8, 18],
@@ -1124,7 +1486,7 @@ img, svg, video, canvas {
       const dayNames = ["dom.", "seg.", "ter.", "qua.", "qui.", "sex.", "sáb."];
 
       const todayHours = schedule[dow];
-      const nowMinutes = now.getHours() * 60 + now.getMinutes();
+      const nowMinutes = hour * 60 + minute;
 
       const nextOpenDay = () => {
         for (let i = 1; i <= 7; i += 1) {
@@ -1136,7 +1498,7 @@ img, svg, video, canvas {
 
       if (!todayHours) {
         const nd = nextOpenDay();
-        statusEl.textContent = `Abre ${dayNames[nd]} às ${fmt(schedule[nd][0])}`;
+        statusEl.textContent = `Fechado agora • Abre ${dayNames[nd]} às ${fmt(schedule[nd][0])}`;
         return;
       }
 
@@ -1160,6 +1522,7 @@ img, svg, video, canvas {
     // Header muda quando rola
     const topbar = document.getElementById("topbar");
     const onScroll = () => {
+      if (!topbar) return;
       if (window.scrollY > 10) topbar.classList.add("is-scrolled");
       else topbar.classList.remove("is-scrolled");
     };
@@ -1177,7 +1540,7 @@ img, svg, video, canvas {
             io.unobserve(entry.target);
           }
         });
-      }, { threshold: 0.12 });
+      }, { threshold: 0.12, rootMargin: "100px" });
 
       document.querySelectorAll(".reveal:not(.is-visible)").forEach(el => io.observe(el));
       const showcase = document.querySelector(".showcase");
@@ -1245,11 +1608,79 @@ img, svg, video, canvas {
               io.disconnect();
             }
           });
-        }, { threshold: 0.18 });
+        }, { threshold: 0.18, rootMargin: "80px" });
         io.observe(section);
       } else {
         window.addEventListener("scroll", runSpotlight, { passive:true, once:true });
       }
+    })();
+
+    // Click-to-load do mapa (evita custo no load)
+    (function(){
+      const btn = document.getElementById("loadMap");
+      const placeholder = document.getElementById("mapPlaceholder");
+      if (!btn || !placeholder) return;
+      btn.addEventListener("click", () => {
+        const iframe = document.createElement("iframe");
+        iframe.title = "Mapa - GRÁFICA SAGA";
+        iframe.loading = "lazy";
+        iframe.referrerPolicy = "no-referrer-when-downgrade";
+        iframe.src = "https://www.google.com/maps?q=Av.%20Afonso%20Pena%2C%203268%20Uberl%C3%A2ndia%20MG%2038400-710&output=embed";
+        iframe.style.width = "100%";
+        iframe.style.height = "340px";
+        iframe.style.border = "0";
+        iframe.style.borderRadius = "var(--radius-2)";
+        placeholder.replaceWith(iframe);
+      }, { passive:true });
+    })();
+
+    // Orçamento pelo WhatsApp (formulário)
+    (function(){
+      const btn = document.getElementById("sendBudget");
+      if (!btn) return;
+      btn.addEventListener("click", () => {
+        const get = (id) => (document.getElementById(id)?.value || "").trim();
+        const produto = get("bProduto");
+        const quantidade = get("bQuantidade");
+        const tamanho = get("bTamanho");
+        const papel = get("bPapel");
+        const impressao = get("bImpressao");
+        const acabamentos = get("bAcabamentos");
+        const prazo = get("bPrazo");
+        const arte = get("bArte");
+        const obs = get("bObs");
+
+        const parts = [
+          "Olá! Quero orçamento para:",
+          `Produto: ${produto || "-"}`,
+          `Quantidade: ${quantidade || "-"}`,
+          `Tamanho: ${tamanho || "-"}`,
+          `Papel/Gramatura: ${papel || "-"}`,
+          `Impressão: ${impressao || "-"}`,
+          `Acabamentos: ${acabamentos || "-"}`,
+          `Prazo desejado: ${prazo || "-"}`,
+          `Já tem arte: ${arte || "-"}`,
+          obs ? `Observações: ${obs}` : ""
+        ].filter(Boolean).join("\n");
+
+        const url = `https://wa.me/5534920002591?text=${encodeURIComponent(parts)}`;
+        window.open(url, "_blank");
+      });
+    })();
+
+    // Produtos clicáveis com mensagem pré-preenchida
+    (function(){
+      const items = document.querySelectorAll(".product-link");
+      items.forEach((el) => {
+        const product = el.dataset.product || "Produto";
+        const qty = el.dataset.qty || "1.000";
+        const size = el.dataset.size || "9x5 cm";
+        const print = el.dataset.print || "4x4";
+        const msg = `Olá! Quero orçamento para ${qty} ${product}, tamanho ${size}, impressão ${print}.`;
+        el.href = `https://wa.me/5534920002591?text=${encodeURIComponent(msg)}`;
+        el.target = "_blank";
+        el.rel = "noopener";
+      });
     })();
   </script>
 </body>
